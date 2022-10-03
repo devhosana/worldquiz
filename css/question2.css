@@ -1,0 +1,11 @@
+.flags__container--2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4.8rem;
+}
+
+.flag__container--2 {
+  width: 23.76rem;
+  height: 13.46rem;
+  cursor: pointer;
+}

@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+:root {
+
+  /* MAIN AND SECONDARY */
+  
+  --color--main: #2934d4;
+  --color--secondary: rgb(15, 211, 236);
+
+  /* --color--debug: red; */
+
+  /* BLACK AND WHITE */
+  --color--white__transparent: rgba(255, 255, 255, 0.675);
+  --color--white__transparent2: rgba(255, 255, 255, 0.3);
+  
+  --color--white: #fff;
+  --color--black: #171738;
+    
+}
+
+
+/* ------------- */
+/* GLOBAL RESETS */
+/* ------------- */
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  /* Debug */
+  /* border: 1px solid var(--color--debug); */
+}
+
+*:focus {
+  outline: none;
+}
+
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color--black);
+
+  overflow: hidden;
+  
+  /* Apenas nesse app */
+  background-image: linear-gradient(to top left, var(--color--secondary) 0%, var(--color--main) 100%);
+  height: 100vh;
+  padding: 0 3.2rem;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* /////////// */
+/* JS CLASSES */
+/* /////////// */
+
+.hidden {
+  opacity: 0;
+}
+
+.scaleDown {
+  transform: scale(0.95);
+};
+
+
+
+/* /// */
+/* APP */
+/* /// */
+
+
+.score__container {
+  margin: 1.6rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #000;
+
+  opacity: 0;
+}
+
+.score__text {
+  padding: 1.6rem;
+  
+}
+
+.score__value {
+  
+  padding: 1.6rem;
+}
+
+
+.main__container {
+  position: relative;
+  box-shadow: 0  1rem 4rem rgba(0, 0, 0, 0.40);
+  border-radius: 4px;
+  background-color: var(--color--white__transparent);
+  max-width: 130rem;
+  height: 85%;
+  
+  padding: 4.8rem;
+  margin-top: 5.6rem;
+  
+  overflow: hidden;
+  transition: all 0.2s ease-in;
+
+  
+  /* Desativar no final */
+  width: 120rem; 
+
+}
+
+.inner__container--splash {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 25fr 10.5fr 52.5fr 12fr;
+
+  justify-items: center;
+  align-items: center;
+
+  justify-content: center;
+  align-content: center;
+
+  height: 100%;
+  width: 100%;
+  transition: 0.2s all;
+}
+
+.icon__heading {
+  font-size: 9.6rem;
+}
+
+.logo__container {
+  align-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+
+  transition: all 0.5s;
+}
+      
+
+/* ////// */
+/* FOOTER */
+/* ////// */
+
+
+footer {
+  padding: 1.6rem;
+}
+
+.footer__link:link,
+.footer__link:visited {
+  font-weight: 600;
+  letter-spacing: 1.5px;
+
+  font-size: 2.4rem;
+  color: var(--color--white__transparent2);
+  text-decoration: none;
+  transition: all 0.4s;
+}
+
+.footer__link:hover,
+.footer__link:active {
+  color: var(--color--white__transparent);
+}
+
+
+/* DESATIVAR, APENAS PARA NETLIFY  */
+
+/*
+
+body::after {
+  content: "Under development";
+  position: fixed;
+
+
+  padding: 0.8rem 5rem;
+  background-color: #F0DB4F;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.25);
+
+  top: 7.5%;
+  right: -3.6%;
+
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 600;
+
+  transform: rotate(45deg);
+
+}
+
+*/
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Quiz - Test your knowledge about contries!</title>
+
+    <script src="https://unpkg.com/phosphor-icons"></script>
+    
+    <script type="module" defer src="script.js" ></script>
+    
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/queries.css" rel="stylesheet" />
+
+    <link href="css/splash_screen.css" rel="stylesheet" />
+    
+    <link href="css/question.css" rel="stylesheet" />
+    <link href="css/question1.css" rel="stylesheet" />
+    <link href="css/question2.css" rel="stylesheet" />
+    <link href="css/question3.css" rel="stylesheet" />
+
+</head>
+
+<body>
+  
+  <article class="main__container">
+    
+
+    <!-- SPLASH SCREEN -->
+    <div class="inner__container--splash splash__screen">
+        
+        <div class="logo__container">
+          <i class="ph-globe-bold icon__heading"></i>
+        <h1 class="heading__primary">World<br>Quiz</h1>
+      </div>
+  
+      <div class="content__container">
+        <h2 class="heading__secondary">How to play</h2>
+        
+      </div>
+  
+      <p class="text__how">
+        Do you think you are an flag expert? Ten questions about countries and their flags, five seconds to answer each one, be quick! The faster you answer correctly, than more points you get.
+      </p>
+      
+      <button class="play__button">Play now</button>
+
+    </div>
+    
+    <!-- QUESTION #0 -->
+    <div class="inner__container--question select__question hide__all" data-calls="1">
+      
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">1</span> -</h3>
+        <p class="question__text">From which country is this flag?</p>
+      </div>
+  
+      <div class="flags__container flags__container--1">
+        <div class="flag__container flag__container--1">
+          <img src="img/flag1.svg" class="flag__img" alt="country flag">
+        </div>
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+        </div>
+  
+        <input
+          type='text'
+          autocomplete="off"
+          placeholder="Your answer"
+          class='input__answer'
+        />
+      </div>
+  
+    </div>
+  
+    <!-- QUESTION #1 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="4">
+
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">2</span> -</h3>
+        <p class="question__text">Select the flag of <span class="question__placeholder">France</span></p>
+      </div>
+
+      <div class="flags__container flags__container--2">
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag1.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag2.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag3.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag4.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="input__container">  
+        <div class="progress__bar">
+        </div>
+      </div>
+
+    </div>
+  
+    <!-- QUESTION #2 -->
+    <div class="inner__container--question select__question hide__all" data-calls="1">
+    
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">3</span> -</h3>
+        <p class="question__text">What is the capital of this <span class="question__placeholder">country</span>?</p>
+      </div>
+  
+      <div class="flags__container flags__container--3">
+        <div class="flag__container flag__container--1">
+          <img src="img/flag1.svg" class="flag__img" alt="country flag">
+        </div>
+        <p class="country__name">United Kingdom</p>
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+        </div>
+  
+        <input
+          type='text'
+          autocomplete="off"
+          placeholder="Your answer"
+          class='input__answer'
+        />
+      </div>
+  
+    </div>
+  
+    <!-- QUESTION #3 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="1">
+  
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">4</span> -</h3>
+        <p class="question__text">Name one country that border the country below</p>
+      </div>
+  
+      <div class="flags__container flags__container--3">
+        <div class="flag__container flag__container--1">
+          <img src="img/flag1.svg" class="flag__img" alt="country flag">
+        </div>
+        <p class="country__name">United Kingdom</p>
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+        </div>
+  
+        <input
+          type='text'
+          autocomplete="off"
+          placeholder="Your answer"
+          class='input__answer'
+        />
+      </div>
+    </div>
+    
+    <!-- QUESTION #4 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="4">
+  
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">5</span> -</h3>
+        <p class="question__text">Select the country with the largest size</p>
+      </div>
+  
+      <div class="flags__container flags__container--2">
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag1.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag2.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag3.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag4.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar ">
+  
+        </div>
+      </div>
+  
+    </div>
+    
+    <!-- QUESTION #5 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="4">
+  
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">6</span> -</h3>
+        <p class="question__text"><span class="question__placeholder">Berlin</span> is the capital of which country below</p>
+      </div>
+  
+      <div class="flags__container flags__container--2">
+  
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag1.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+  
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag2.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+  
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag3.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+  
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag4.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+        </div>
+      </div>
+  
+    </div>
+    
+    <!-- QUESTION #6 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="1">
+  
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">7</span> -</h3>
+        <p class="question__text">What continent is this country on?</p>
+      </div>
+  
+      <div class="flags__container flags__container--1">
+        <div class="flag__container flag__container--1">
+          <img src="img/flag1.svg" class="flag__img" alt="country flag">
+        </div>
+  
+        <p class="country__name">United Kingdom</p>
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+  
+        </div>
+  
+        <input
+          type='text'
+          autocomplete="off"
+          placeholder="Your answer"
+          class='input__answer'
+        />
+      </div>
+  
+    </div>
+  
+    <!-- QUESTION #7 -->
+    <div class="inner__container--question select__question hide__all"  data-calls="4">
+  
+      <div class="question__container">
+        <h3 class="question">- Question <span class="question__number">8</span> -</h3>
+        <p class="question__text">Which one is the flag of <span class="question__placeholder">Germany</span></p>
+      </div>
+  
+      <div class="flags__container flags__container--2">
+  
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag1.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag2.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+    
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag3.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+        
+        <div class="choose__container">
+          <div class="flag__container flag__container--2">
+            <img src="img/flag4.svg" class="flag__img" alt="country flag">
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="input__container">
+        <div class="progress__bar">
+        </div>
+      </div>
+  
+    </div>
+
+  </article>
+
+  <footer>
+      <a href="https://www.hosana.dev" class="footer__link" target="_blank">hosana.dev</a>
+  </footer>
+
+</body>
+</html>
+
+<!-- soli Deo gloria -->

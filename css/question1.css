@@ -1,0 +1,9 @@
+.flags__container--1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.flag__container--1 {
+  width: 41.25rem;
+  height: 23.37rem;
+}

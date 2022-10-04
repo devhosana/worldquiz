@@ -88,7 +88,8 @@ const quiz = {
 
   fetchCountries() {
 
-    // Falta impedir que obtenhamos países repetidos
+    // Parei aqui 
+    // Falta impedir que obtenhamos países repetidos e também na pergunta sobre capital mudar para nome da capital
     // if (!this.currentCountries.includes(countryData)) {
 
     // };
@@ -97,7 +98,7 @@ const quiz = {
     this.calls = Number(this.currentQuestion.getAttribute("data-calls"));
     
     while (this.calls > 0) {
-  
+
       const currentCountry = countries.getRandomCountry();
       this.getCountryData(currentCountry)
         .then(data => {

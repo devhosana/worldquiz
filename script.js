@@ -28,14 +28,11 @@ const quiz = {
   /// API ///
   ///////////
 
-
-  async getCountryData() {
-    const country = countries.getRandomCountry();
-
+  async getCountryData(country) {
     const response = await fetch(`https://restcountries.com/v2/name/${country}`);
     const [countryData] = await response.json();
-
-    return countryData;
+    
+    return { [country]: countryData };
   },
 
 
@@ -72,13 +69,11 @@ const quiz = {
 
 
   getRandomQuestion() {
-
     // Obtendo número aleatório a partir do tamanho de allQuestions
     const randomNumber = randomNumFrom(allQuestions);
 
     // Obtendo pergunta de acordo com número aleatório
     this.currentQuestion = allQuestions[randomNumber];
-
   },
 
   
@@ -93,22 +88,24 @@ const quiz = {
 
   fetchCountries() {
 
+    // Falta impedir que obtenhamos países repetidos
+    // if (!this.currentCountries.includes(countryData)) {
+
+    // };
+
     this.currentCountries = [];
     this.calls = Number(this.currentQuestion.getAttribute("data-calls"));
-
+    
     while (this.calls > 0) {
-      const countryData = this.getCountryData();
+  
+      const currentCountry = countries.getRandomCountry();
+      this.getCountryData(currentCountry)
+        .then(data => {
+          this.currentCountries.push(data);
+        })
+      ;
 
-      if (!this.currentCountries.contains(countryData)) {
-        this.currentCountries(countryData);
-        this.calls--;
-      };
-
-      // Parei aqui falta:
-      // impedir que países repetidos entrem na array currentCountries (feito, verificar se funciona)
-      // Renderizar imagem da bandeiras (logo abaixo)
-      // Consertar getCountryData que só retorna promise
-
+      this.calls--;
     };
 
   },
@@ -116,16 +113,17 @@ const quiz = {
 
   renderFlag() {
     const flagPlaceHolders = this.currentQuestion.querySelectorAll("img");
-    console.log(this.currentCountries);
     
-    flagPlaceHolders.forEach((element, index) => {
-      // element.src = this.currentCountries[index].flag;
+     flagPlaceHolders.forEach((element, index) => {
+      const countryName = Object.keys(this.currentCountries[index]);
+      element.src = this.currentCountries[index][countryName].flag;
     });
-
   },
   
 
   loadQuestion() {
+
+    let correctCountry;
 
     // Gerando pergunta aleatória
     this.getRandomQuestion();
@@ -133,32 +131,41 @@ const quiz = {
     // Aumentando pergunta
     this.increaseQuestionNumber();
 
-    // Obter place holder da pergunta (pode não haver)
+    // Obter placeholder do nome do país na pergunta (pode não haver)
     this.questionPlaceholder = this.currentQuestion.querySelector(".question__placeholder");
     
     // Obtendo país(es)
     this.fetchCountries();
 
-    // Exibindo bandeira(s)
-    this.renderFlag();
+    // Colocando cursor diretamente no campo da resposta (pode não haver)
+    // this.currentQuestion?.querySelector(".input__answer").focus();
       
-    // Iniciando timer pergunta
     // Lembrando que arrow function não possui sua própria this keyword
     setTimeout(() => {
+
+      // Selecionando país que será a resposta correta
+      if (this.currentCountries.length > 1) {
+        correctCountry = this.currentCountries[randomNumFrom(this.currentCountries)];
+      };
+
+      if (this.currentCountries.length === 1) correctCountry = this.currentCountries[0];
+
+      // Colocando nome do país nas questões com question__placeholder
+      if (this.questionPlaceholder) this.questionPlaceholder.textContent = String(Object.keys(correctCountry));
 
       // Mostrando pergunta randomizada
       this.currentQuestion.classList.remove("hide__all");
 
-      // Iniciando Timer
-      // 500ms === +/- 10 segundos
-      // 325ms === +/- 7 segundos
-      // 250ms === +/- 5 segundos
-      this.initTimer(500);
+      // Exibindo bandeira(s)
+      this.renderFlag();
+
+      // Iniciando Timer - 325ms === +/- 7 segundos
+      this.initTimer(325);
 
       // POR ÚLTIMO exibir novamente mainContainer com tudo carregado
       this.toggleHidden();
 
-    }, 1000);
+    }, 1500);
 
   },
 

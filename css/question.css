@@ -118,8 +118,6 @@
   background-color: rgba(78, 248, 10, 0.75);
 
   opacity: 0.95;
-  
-
 }
 
 .input__answer {
@@ -148,23 +146,19 @@
   color: rgba(44, 42, 184);
 }
 
-
-
-
 .input__answer::placeholder {
   transition: all 0.2s;
-  color: rgba(44, 42, 184, 0.50);
+  color: rgba(44, 42, 184, 0.25);
 }
 
 
-.input__answer:active::placeholder {
-
+.input__answer:focus::placeholder {
+  color: rgba(44, 42, 184, 0.75);
 }
 
 
 .hide__all {
   display: none;
-
 }
 
 

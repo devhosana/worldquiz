@@ -1,5 +1,7 @@
 import randomNumFrom from "./methods.js";
 
+let latestCurrentCountry;
+
 const countries = {
 
   easyLevel: [
@@ -113,11 +115,21 @@ const countries = {
   
 
   // Dificuldade: 0 = fácil, 1 = médio, 2 = díficil
-  // Se não indicarmos nível de dificuldade será aleatório
+  // Se não indicarmos nível de dificuldade, será aleatório
   getRandomCountry(level) {
-    const difficultyLevel = this.pickDifficulty(level);
-    const country = difficultyLevel[randomNumFrom(difficultyLevel)];
 
+    const difficultyLevel = this.pickDifficulty(level);
+    let country = difficultyLevel[randomNumFrom(difficultyLevel)];
+    
+    while (country === latestCurrentCountry) {
+      // DEBUG, COMPARAR PAÍSES SORTEADOS
+      console.log("País repetido?" ,country === latestCurrentCountry);
+      // console.log(`País: ${country}, Último país: ${latestCurrentCountry}`);
+
+      country = difficultyLevel[randomNumFrom(difficultyLevel)];
+    };
+    
+    latestCurrentCountry = country;
     return country;
   },
 

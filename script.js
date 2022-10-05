@@ -17,11 +17,15 @@ const quiz = {
   //////////////////////
 
   currentQuestion: undefined,
-  question: null,
   questionPlaceholder: undefined,
-  currentCountries: [],
-  currentQuestionNumber: 0,
+  latestCountry: undefined,
   calls: undefined,
+  question: null,
+  currentQuestionNumber: 0,
+  currentCountries: [],
+
+  // Para cortar depois DC de Washington DC
+  space: " ",
 
 
   ///////////
@@ -29,10 +33,12 @@ const quiz = {
   ///////////
 
   async getCountryData(country) {
+    
     const response = await fetch(`https://restcountries.com/v2/name/${country}`);
     const [countryData] = await response.json();
     
     return { [country]: countryData };
+
   },
 
 
@@ -69,11 +75,18 @@ const quiz = {
 
 
   getRandomQuestion() {
-    // Obtendo número aleatório a partir do tamanho de allQuestions
-    const randomNumber = randomNumFrom(allQuestions);
+    // const randomQuestionNum = randomNumFrom(allQuestions);
 
-    // Obtendo pergunta de acordo com número aleatório
-    this.currentQuestion = allQuestions[randomNumber];
+    // DEBUG ESCOLHER PERGUNTA 
+    // 0 - De qual país é essa bandeira
+    // 1 - Qual a capital desse país
+    // 2 - Nomeie um país que faça fronteira com este
+    // 3 - Berlin é a capital de qual destes países?
+    // 4 - Em qual continente esse país fica
+    // 5 - Qual destas 4 é a bandeira da Alemanha?
+    const randomQuestionNum = 3;
+
+    this.currentQuestion = allQuestions[randomQuestionNum];
   },
 
   
@@ -88,25 +101,22 @@ const quiz = {
 
   fetchCountries() {
 
-    // Parei aqui 
-    // Falta impedir que obtenhamos países repetidos e também na pergunta sobre capital mudar para nome da capital
-    // if (!this.currentCountries.includes(countryData)) {
-
-    // };
-
     this.currentCountries = [];
     this.calls = Number(this.currentQuestion.getAttribute("data-calls"));
     
     while (this.calls > 0) {
 
+      // DEBUG - ESCOLHER PAÍS P/ TESTES
+      // const currentCountry = "United States of America";
+      
       const currentCountry = countries.getRandomCountry();
+      
       this.getCountryData(currentCountry)
-        .then(data => {
-          this.currentCountries.push(data);
-        })
+        .then(data => this.currentCountries.push(data))
       ;
-
+      
       this.calls--;
+
     };
 
   },
@@ -152,7 +162,14 @@ const quiz = {
       if (this.currentCountries.length === 1) correctCountry = this.currentCountries[0];
 
       // Colocando nome do país nas questões com question__placeholder
-      if (this.questionPlaceholder) this.questionPlaceholder.textContent = String(Object.keys(correctCountry));
+      if (this.questionPlaceholder && !this.questionPlaceholder.textContent.includes("Berlin")) {
+        this.questionPlaceholder.textContent = String(Object.keys(correctCountry));
+      };
+      
+      if (this.questionPlaceholder?.textContent.includes("Berlin")) {
+        console.log("Pergunta sobre capital");
+        this.questionPlaceholder.textContent = correctCountry[Object.keys(correctCountry)].capital;
+      };
 
       // Mostrando pergunta randomizada
       this.currentQuestion.classList.remove("hide__all");
@@ -160,8 +177,8 @@ const quiz = {
       // Exibindo bandeira(s)
       this.renderFlag();
 
-      // Iniciando Timer - 325ms === +/- 7 segundos
-      this.initTimer(325);
+      // Iniciando Timer - 500ms === +/- 10 segundos
+      this.initTimer(500);
 
       // POR ÚLTIMO exibir novamente mainContainer com tudo carregado
       this.toggleHidden();

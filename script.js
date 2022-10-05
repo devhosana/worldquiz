@@ -109,6 +109,8 @@ const quiz = {
 
       // DEBUG - ESCOLHER PAÍS P/ TESTES
       // const currentCountry = "Portugal";
+
+      // Criar set parar incluir todos os países e só parar quando o tamanho for 4
       
       const currentCountry = countries.getRandomCountry();
       

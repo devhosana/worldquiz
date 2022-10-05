@@ -167,7 +167,7 @@ const quiz = {
       };
       
       if (this.questionPlaceholder?.textContent.includes("Berlin")) {
-        console.log("Pergunta sobre capital");
+        // console.log("Pergunta sobre capital");
         this.questionPlaceholder.textContent = correctCountry[Object.keys(correctCountry)].capital;
       };
 

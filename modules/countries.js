@@ -72,7 +72,7 @@ const countries = {
     "Malaysia",
     "Indonesia",
     "Singapore",
-    "Monaco",
+    // "Monaco",
     "Lebanon",
     "Qatar",
     "Luxembourg",
@@ -123,7 +123,7 @@ const countries = {
     
     while (country === latestCurrentCountry) {
       // DEBUG, COMPARAR PAÍSES SORTEADOS
-      console.log("País repetido?" ,country === latestCurrentCountry);
+      // console.log("País repetido?", country === latestCurrentCountry);
       // console.log(`País: ${country}, Último país: ${latestCurrentCountry}`);
 
       country = difficultyLevel[randomNumFrom(difficultyLevel)];

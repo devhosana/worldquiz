@@ -75,7 +75,7 @@ const quiz = {
 
 
   getRandomQuestion() {
-    // const randomQuestionNum = randomNumFrom(allQuestions);
+    const randomQuestionNum = randomNumFrom(allQuestions);
 
     // DEBUG ESCOLHER PERGUNTA 
     // 0 - De qual país é essa bandeira
@@ -84,7 +84,8 @@ const quiz = {
     // 3 - Berlin é a capital de qual destes países?
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Alemanha?
-    const randomQuestionNum = 3;
+
+    // const randomQuestionNum = 3;
 
     this.currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -107,7 +108,7 @@ const quiz = {
     while (this.calls > 0) {
 
       // DEBUG - ESCOLHER PAÍS P/ TESTES
-      // const currentCountry = "United States of America";
+      // const currentCountry = "Portugal";
       
       const currentCountry = countries.getRandomCountry();
       

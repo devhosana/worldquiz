@@ -1,6 +1,7 @@
 import randomNumFrom from "./modules/methods.js";
 import countries from "./modules/countries.js";
 
+
 //////////////////////
 /// HTML Elements ///
 //////////////////////
@@ -10,34 +11,59 @@ const allQuestions = document.querySelectorAll(".select__question");
 const playButton = document.querySelector(".play__button");
 const mainContainer = document.querySelector(".main__container");
 
+//////////////////////
+/// Game Variables ///
+//////////////////////
+
+let questionPlaceholder;
+let currentQuestion;
+let currentCountries;
+let flagPlaceHolders;
+let randomQuestionNum;
+
+let currentQuestionNumber = 0;
+let calls;
+
+// Para cortar depois DC de Washington DC
+const space = " ";
+
 const quiz = {
-
-  //////////////////////
-  /// Game Variables ///
-  //////////////////////
-
-  currentQuestion: undefined,
-  questionPlaceholder: undefined,
-  latestCountry: undefined,
-  calls: undefined,
-  question: null,
-  currentQuestionNumber: 0,
-  currentCountries: [],
-
-  // Para cortar depois DC de Washington DC
-  space: " ",
-
 
   ///////////
   /// API ///
   ///////////
 
-  async getCountryData(country) {
+  async fetchCountry(countries) {
+
+    let data;
+
+    // Perguntas com um país somente
+    if (countries.length === 1) {
+      data = await fetch(`https://restcountries.com/v2/name/${countries[0]}`);
+      const [countryData] = await data.json();
+      
+      currentCountries[0] = countryData;
+    };
     
-    const response = await fetch(`https://restcountries.com/v2/name/${country}`);
-    const [countryData] = await response.json();
-    
-    return { [country]: countryData };
+    // Perguntas com mais de um país
+    if (countries.length > 1) {
+
+      data = await Promise.all([
+        fetch(`https://restcountries.com/v2/name/${countries[0]}`)
+           .then(response => response.json()),
+        fetch(`https://restcountries.com/v2/name/${countries[1]}`)
+           .then(response => response.json()),
+        fetch(`https://restcountries.com/v2/name/${countries[2]}`)
+           .then(response => response.json()),
+        fetch(`https://restcountries.com/v2/name/${countries[3]}`)
+           .then(response => response.json()),
+      ]);
+
+      data.forEach((countryData, index) => {
+        currentCountries[index] = countryData[0];
+      });
+
+    };
 
   },
 
@@ -59,7 +85,7 @@ const quiz = {
 
   initTimer(difficulty) {
 
-    const currentProgressBar = this.currentQuestion.querySelector(".progress__bar");
+    const currentProgressBar = currentQuestion.querySelector(".progress__bar");
     let time = 100;
 
     const timer = setInterval(() => {
@@ -75,9 +101,9 @@ const quiz = {
 
 
   getRandomQuestion() {
-    const randomQuestionNum = randomNumFrom(allQuestions);
+    randomQuestionNum = randomNumFrom(allQuestions);
 
-    // DEBUG ESCOLHER PERGUNTA 
+    // DEBUG ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
     // 0 - De qual país é essa bandeira
     // 1 - Qual a capital desse país
     // 2 - Nomeie um país que faça fronteira com este
@@ -85,52 +111,46 @@ const quiz = {
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
-    // const randomQuestionNum = 3;
+    // Parei aqui, precisamos impedir que países que sejam ilhas sejam sorteados na pergunta 2
+    // console.log(randomQuestionNum);
+    // randomQuestionNum = 2;
 
-    this.currentQuestion = allQuestions[randomQuestionNum];
+    currentQuestion = allQuestions[randomQuestionNum];
   },
 
   
   increaseQuestionNumber() {
     // Aumentar pergunta
-    this.currentQuestionNumber++
+    currentQuestionNumber++
 
     // E inserir no HTML
-    this.currentQuestion.querySelector(".question__number").textContent = this.currentQuestionNumber;
+    currentQuestion.querySelector(".question__number").textContent = currentQuestionNumber;
   },
  
+  // DEBUG - ESCOLHER PAÍS P/ TESTES
+  // const currentCountry = "Portugal";
+  
 
-  fetchCountries() {
-
-    this.currentCountries = [];
-    this.calls = Number(this.currentQuestion.getAttribute("data-calls"));
+  getCountry() {
     
-    while (this.calls > 0) {
+    let temp = new Set();
 
-      // DEBUG - ESCOLHER PAÍS P/ TESTES
-      // const currentCountry = "Portugal";
-
-      // Criar set parar incluir todos os países e só parar quando o tamanho for 4
-      
+    while (temp.size < flagPlaceHolders.length)  {
       const currentCountry = countries.getRandomCountry();
-      
-      this.getCountryData(currentCountry)
-        .then(data => this.currentCountries.push(data))
-      ;
-      
-      this.calls--;
-
+      temp.add(currentCountry);
     };
+
+    currentCountries = [...temp];
+
+    this.fetchCountry(currentCountries);
 
   },
 
 
   renderFlag() {
-    const flagPlaceHolders = this.currentQuestion.querySelectorAll("img");
-    
-     flagPlaceHolders.forEach((element, index) => {
-      const countryName = Object.keys(this.currentCountries[index]);
-      element.src = this.currentCountries[index][countryName].flag;
+    flagPlaceHolders.forEach((element, index) => {
+      element.src = currentCountries[index].flag;
+      // console.log(currentCountries[index]);
     });
   },
   
@@ -146,36 +166,45 @@ const quiz = {
     this.increaseQuestionNumber();
 
     // Obter placeholder do nome do país na pergunta (pode não haver)
-    this.questionPlaceholder = this.currentQuestion.querySelector(".question__placeholder");
+    questionPlaceholder = currentQuestion.querySelector(".question__placeholder");
+    
+    // Obter número de bandeiras para definir quantas fetchs faremos
+    flagPlaceHolders = currentQuestion.querySelectorAll(".flag__img");
+
+    // Limpar países anteriormente randomizados
+    currentCountries = null;
     
     // Obtendo país(es)
-    this.fetchCountries();
+    this.getCountry();
 
+    
     // Colocando cursor diretamente no campo da resposta (pode não haver)
-    // this.currentQuestion?.querySelector(".input__answer").focus();
+    // currentQuestion?.querySelector(".input__answer").focus();
       
-    // Lembrando que arrow function não possui sua própria this keyword
+    // Lembrando que:
+    // Arrow function não possui sua própria this keyword
+    // setTimeOut é assíncrono
     setTimeout(() => {
 
       // Selecionando país que será a resposta correta
-      if (this.currentCountries.length > 1) {
-        correctCountry = this.currentCountries[randomNumFrom(this.currentCountries)];
+      if (currentCountries.length > 1) {
+        correctCountry = currentCountries[randomNumFrom(currentCountries)];
       };
 
-      if (this.currentCountries.length === 1) correctCountry = this.currentCountries[0];
+      if (currentCountries.length === 1) correctCountry = currentCountries[0];
 
       // Colocando nome do país nas questões com question__placeholder
-      if (this.questionPlaceholder && !this.questionPlaceholder.textContent.includes("Berlin")) {
-        this.questionPlaceholder.textContent = String(Object.keys(correctCountry));
+      if (questionPlaceholder && !questionPlaceholder.textContent.includes("Berlin")) {
+        questionPlaceholder.textContent =correctCountry.name;
       };
       
-      if (this.questionPlaceholder?.textContent.includes("Berlin")) {
+      if (questionPlaceholder?.textContent.includes("Berlin")) {
         // console.log("Pergunta sobre capital");
-        this.questionPlaceholder.textContent = correctCountry[Object.keys(correctCountry)].capital;
+        questionPlaceholder.textContent = correctCountry.capital;
       };
 
       // Mostrando pergunta randomizada
-      this.currentQuestion.classList.remove("hide__all");
+      currentQuestion.classList.remove("hide__all");
 
       // Exibindo bandeira(s)
       this.renderFlag();

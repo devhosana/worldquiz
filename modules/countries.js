@@ -52,6 +52,7 @@ const countries = {
     "Taiwan",
     "Croatia",
     "Nigeria",
+    "Paraguay",
   ],
 
   hardLevel: [
@@ -59,7 +60,6 @@ const countries = {
     "Egypt",
     "Costa rica",
     "Peru",
-    "Paraguay",
     "Angola",
     "Morocco",
     "Turkey",
@@ -72,7 +72,6 @@ const countries = {
     "Malaysia",
     "Indonesia",
     "Singapore",
-    // "Monaco",
     "Lebanon",
     "Qatar",
     "Luxembourg",
@@ -82,7 +81,6 @@ const countries = {
     "Palestine",
     "Philippines",
     "Senegal",
-    "Tanzania",
     "Iraq",
   ],
 
@@ -115,7 +113,6 @@ const countries = {
   
 
   getRandomCountry(level) {
-
     // P/ DEBUG ESCOLHER DIFICULDADE 
     // 0 - Países dificuldade fácil
     // 1 - Países dificuldade média
@@ -126,23 +123,6 @@ const countries = {
     const difficultyLevel = this.pickDifficulty(level);
     let country = difficultyLevel[randomNumFrom(difficultyLevel)];
 
-    while (country === latestCurrentCountry) {
-
-      // DEBUG, COMPARAR PAÍSES SORTEADOS
-      console.log("");
-      console.log("País repetido?", country === latestCurrentCountry);
-      console.log(`País: ${country}, Último país: ${latestCurrentCountry}`);
-      console.log("");
-
-      country = difficultyLevel[randomNumFrom(difficultyLevel)];
-    };
-
-    // Parei aqui
-    // Por alguma razão estamos obtendo países repetidos 
-    // bug ocorre ao selecionar um país, depois outro diferente, e após isto selecionar o mesmo que já havia sido sorteado
-    console.log(`País:`, country, `Último país`, latestCurrentCountry);
-    
-    latestCurrentCountry = country;
     return country;
   },
 

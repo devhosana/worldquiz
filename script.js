@@ -99,7 +99,7 @@ const quiz = {
 
   // Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
 
-  // Disparar timer somente do fetch retornar response.ok
+  // Disparar timer somente após fetch retornar response.ok
 
   // Ou ainda tentar verificar se response emite algum tempo para então inseri-no no timer de setTimeOut
 
@@ -213,14 +213,13 @@ const quiz = {
         .find(country => correctCountry.name.includes(country))
         ;
         
-        // No caso da Índia ocorre o contrário, nome que é feito o fetch é composto e correctCountry.name é o correto
+        // No caso da Índia ocorre o contrário, nome que é feito o fetch é composto e correctCountry.name é o que queremos
         questionPlaceholder.textContent = 
           correctCountry.name === "India" ? correctCountry.name : countryName
         ;
       };
       
       if (questionPlaceholder?.textContent.includes("Berlin")) {
-        console.log(correctCountry.capital);
         questionPlaceholder.textContent = correctCountry.capital;
       };
 

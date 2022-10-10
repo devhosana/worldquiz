@@ -26,9 +26,10 @@ const countries = {
     "Netherlands",
     "Belgium",
     "Portugal",
-    // "India",
     "Denmark",
     "Australia",
+    "China",
+    "Republic of India",
   ],
 
   mediumLevel: [
@@ -53,9 +54,13 @@ const countries = {
     "Croatia",
     "Nigeria",
     "Paraguay",
+    "New Zealand",
+    "Mozambique",
+    "Puerto Rico"
   ],
-
+  
   hardLevel: [
+    "Monaco",
     "Bolivia",
     "Egypt",
     "Costa rica",
@@ -82,6 +87,8 @@ const countries = {
     "Philippines",
     "Senegal",
     "Iraq",
+    "Hungary",
+    "Tanzania"
   ],
 
 
@@ -96,9 +103,26 @@ const countries = {
   },
 
   
-  allCountries() {
+  get allCountries() {
     return this.levels.flat();
   },
+
+  islandCountries: [
+    "Cuba",
+    "Australia",
+    "Iceland",
+    "Indonesia",
+    "Ireland",
+    "Jamaica",
+    "United Kingdom",
+    "Japan",
+    "New Zealand",
+    "Philippines",
+    "Singapore",
+    "Greenland",
+    "Taiwan",
+    "Puerto Rico",
+  ],
 
   randomLevel() {
     const level = randomNumFrom(this.levels);

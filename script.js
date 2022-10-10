@@ -1,7 +1,6 @@
 import randomNumFrom from "./modules/methods.js";
 import countries from "./modules/countries.js";
 
-
 //////////////////////
 /// HTML Elements ///
 //////////////////////
@@ -15,6 +14,7 @@ const mainContainer = document.querySelector(".main__container");
 /// Game Variables ///
 //////////////////////
 
+
 let questionPlaceholder;
 let currentQuestion;
 let currentCountries;
@@ -22,10 +22,6 @@ let flagPlaceHolders;
 let randomQuestionNum;
 
 let currentQuestionNumber = 0;
-let calls;
-
-// Para cortar depois DC de Washington DC
-const space = " ";
 
 const quiz = {
 
@@ -99,6 +95,19 @@ const quiz = {
 
   },
 
+  // Tratar possíveis erros do fetch
+
+  // Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
+
+  // Disparar timer somente do fetch retornar response.ok
+
+  // Ou ainda tentar verificar se response emite algum tempo para então inseri-no no timer de setTimeOut
+
+  // Slow 3g bandeiras não são renderizadas
+
+  // Fast 3g país da resposta correta sempre tem delay denunciando qual a resposta certa
+  
+  // response.ok && 500ms
 
   getRandomQuestion() {
     randomQuestionNum = randomNumFrom(allQuestions);
@@ -111,9 +120,8 @@ const quiz = {
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
-    // Parei aqui, precisamos impedir que países que sejam ilhas sejam sorteados na pergunta 2
     // console.log(randomQuestionNum);
-    // randomQuestionNum = 2;
+    // randomQuestionNum = 3;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -126,9 +134,6 @@ const quiz = {
     // E inserir no HTML
     currentQuestion.querySelector(".question__number").textContent = currentQuestionNumber;
   },
- 
-  // DEBUG - ESCOLHER PAÍS P/ TESTES
-  // const currentCountry = "Portugal";
   
 
   getCountry() {
@@ -136,10 +141,19 @@ const quiz = {
     let temp = new Set();
 
     while (temp.size < flagPlaceHolders.length)  {
-      const currentCountry = countries.getRandomCountry();
+      
+      let currentCountry = countries.getRandomCountry();
+      
+      // Impedir que ilhas sejam sorteadas na pergunta 2
+      while (randomQuestionNum === 2 && countries.islandCountries.includes(currentCountry)) {
+        currentCountry = countries.getRandomCountry();
+      };
+      
       temp.add(currentCountry);
     };
-
+    
+    // DEBUG - ESCOLHER PAÍS P/ TESTES
+    // currentCountries = ["Italy"];
     currentCountries = [...temp];
 
     this.fetchCountry(currentCountries);
@@ -150,7 +164,6 @@ const quiz = {
   renderFlag() {
     flagPlaceHolders.forEach((element, index) => {
       element.src = currentCountries[index].flag;
-      // console.log(currentCountries[index]);
     });
   },
   
@@ -176,14 +189,10 @@ const quiz = {
     
     // Obtendo país(es)
     this.getCountry();
-
-    
-    // Colocando cursor diretamente no campo da resposta (pode não haver)
-    // currentQuestion?.querySelector(".input__answer").focus();
       
     // Lembrando que:
     // Arrow function não possui sua própria this keyword
-    // setTimeOut é assíncrono
+    // setTimeOut também é assíncrono
     setTimeout(() => {
 
       // Selecionando país que será a resposta correta
@@ -195,11 +204,23 @@ const quiz = {
 
       // Colocando nome do país nas questões com question__placeholder
       if (questionPlaceholder && !questionPlaceholder.textContent.includes("Berlin")) {
-        questionPlaceholder.textContent =correctCountry.name;
+
+        // Países eventualmente vem com nomes compostos, exemplo "plurinational state of bolivia"
+        // find abaixo resolve isso
+        
+        let countryName =
+        countries.allCountries
+        .find(country => correctCountry.name.includes(country))
+        ;
+        
+        // No caso da Índia ocorre o contrário, nome que é feito o fetch é composto e correctCountry.name é o correto
+        questionPlaceholder.textContent = 
+          correctCountry.name === "India" ? correctCountry.name : countryName
+        ;
       };
       
       if (questionPlaceholder?.textContent.includes("Berlin")) {
-        // console.log("Pergunta sobre capital");
+        console.log(correctCountry.capital);
         questionPlaceholder.textContent = correctCountry.capital;
       };
 
@@ -209,8 +230,11 @@ const quiz = {
       // Exibindo bandeira(s)
       this.renderFlag();
 
-      // Iniciando Timer - 500ms === +/- 10 segundos
-      this.initTimer(500);
+      // Iniciando Timer - 325ms === +/- 7 segundos
+      this.initTimer(325);
+
+      // Colocando cursor diretamente no campo da resposta (pode não haver)
+      currentQuestion?.querySelector(".input__answer").focus();
 
       // POR ÚLTIMO exibir novamente mainContainer com tudo carregado
       this.toggleHidden();

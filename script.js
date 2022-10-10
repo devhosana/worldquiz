@@ -233,7 +233,7 @@ const quiz = {
       this.initTimer(325);
 
       // Colocando cursor diretamente no campo da resposta (pode não haver)
-      currentQuestion?.querySelector(".input__answer").focus();
+      currentQuestion.querySelector(".input__answer")?.focus();
 
       // POR ÚLTIMO exibir novamente mainContainer com tudo carregado
       this.toggleHidden();

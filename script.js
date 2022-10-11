@@ -18,10 +18,13 @@ const mainContainer = document.querySelector(".main__container");
 let questionPlaceholder;
 let currentQuestion;
 let latestQuestion;
+let currentInput;
 let currentCountries;
+let correctCountry;
 let flagPlaceHolders;
 let randomQuestionNum;
 let chooseContainers;
+let playerAnswer;
 
 let playing = false;
 let currentQuestionNumber = 0;
@@ -82,7 +85,7 @@ const quiz = {
   /////////////////
   
 
-  initTimer(difficulty) {
+  initTimer(duration) {
 
     const currentProgressBar = currentQuestion.querySelector(".progress__bar");
     let time = 100;
@@ -94,7 +97,7 @@ const quiz = {
       if (time <= 30) currentProgressBar.style.backgroundColor = "rgba(220, 20, 60, 0.75)";
 
       if (time <= 0) clearTimeout(timer);
-    }, difficulty);
+    }, duration);
 
   },
 
@@ -103,7 +106,6 @@ const quiz = {
     randomQuestionNum = randomNumFrom(allQuestions);
     
     while (randomQuestionNum === latestQuestion) {
-      console.log("Uma pergunta seria igual a anterior")
       randomQuestionNum = randomNumFrom(allQuestions);
     };
 
@@ -117,7 +119,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
     // console.log(randomQuestionNum);
-    randomQuestionNum = 5;
+    randomQuestionNum = 0;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -164,28 +166,45 @@ const quiz = {
   },
 
   chooseCountry(containers) {
-
-    
-    
     containers.forEach((container, index) => {
 
       container.addEventListener("click", function(event) {
-
-        const userSelection = currentQuestion.querySelector(".choose__container--user__guess");
-        userSelection?.classList.remove("choose__container--user__guess");
-
-        this.classList.add("choose__container--user__guess");
-
+        const userSelection = currentQuestion.querySelector(".choose__container--user__choose");
+        userSelection?.classList.remove("choose__container--user__choose");
+        this.classList.add("choose__container--user__choose");
       });
 
     });
+  },
+
+  storeAnswer() {
+    currentInput = currentQuestion.querySelector(".input__answer");
+    
+    currentInput.addEventListener("input", function(event) {
+      playerAnswer = event.target.value.trim();
+      console.log(playerAnswer);
+    });
+    
+  },
+
+  //////////////////
+  /// Game Logic ///
+  //////////////////
+
+
+
+
+  verifyAnswer() {
 
   },
-  
+
+  //////////////////
+  /// Game Start ///
+  //////////////////
 
   loadQuestion() {
 
-    let correctCountry;
+    correctCountry;
 
     // Gerando pergunta aleatória
     this.getRandomQuestion();
@@ -207,7 +226,7 @@ const quiz = {
     flagPlaceHolders = currentQuestion.querySelectorAll(".flag__img");
 
     // Limpar países anteriormente randomizados
-    currentCountries = null;
+    currentCountries = [];
     
     // Obtendo país(es)
     this.getCountries();
@@ -227,9 +246,8 @@ const quiz = {
       if (questionPlaceholder && !questionPlaceholder.textContent.includes("Berlin")) {
 
         // Países eventualmente vem com nomes compostos, exemplo:
-        // "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND"
-        // find abaixo resolve isso
-        
+        // United Kingdom Of Great Britain And Northern Ireland
+        // find abaixo resolve isso obtendo nome original para ser exibido na array allCountries
         let countryName =
           countries.allCountries
           .find(country => correctCountry.name.includes(country))
@@ -252,6 +270,9 @@ const quiz = {
       // Exibindo bandeira(s)
       this.renderFlag();
 
+      // Armazenar resposta jogador
+      this.storeAnswer();
+
       // Iniciando Timer - 325ms === +/- 7 segundos
       this.initTimer(325);
 
@@ -263,15 +284,9 @@ const quiz = {
 
     }, 1500);
 
+
+
   },
-
-
-  //////////////////
-  /// Game Logic ///
-  //////////////////
-
-
-
 
 };
 
@@ -312,10 +327,27 @@ playButton.addEventListener("click", function(event) {
 
 // Remover opções do botão direito nas imagens das bandeiras
 
+// Pontuação não será mais de acordo com tempo restante mas uma pergunta correta === 1 ponto, porque não podemos indicar qual país é o correto assim que jogador selecionar, pois bastaria sair selecionando um por um para descobrir qual a resposta correta nas perguntas sem input
 
+// Load Question está grande demais, diminuir em funções menores
 
+// Implementar "tricky questions" exemplo:
+// Fazer isso se jogador acertar muitas seguidas
 
-
+// tunisia X turquia
+// bandeira puerto rico X cuba
+// australia X nova zelandia
+// monaco X polonia X indonesia X gronelandia X singapura
+// Romeniax chade (chade ainda não está incluído)
+// Filipinas X república tcheca
+// Mexico X itália 
+// Ecuador X colombia X venezuela
+// Síria X Iraque
+// Irlanda X Costa do marfim
+// Paraguai X Holanda
+// Hungria X ITalia
+// Russia X luxemburgo
+// Islandia X Noruega X Suécia X Finlandia X Dinamarca
 
 
 

@@ -17,10 +17,13 @@ const mainContainer = document.querySelector(".main__container");
 
 let questionPlaceholder;
 let currentQuestion;
+let latestQuestion;
 let currentCountries;
 let flagPlaceHolders;
 let randomQuestionNum;
+let chooseContainers;
 
+let playing = false;
 let currentQuestionNumber = 0;
 
 const quiz = {
@@ -95,26 +98,17 @@ const quiz = {
 
   },
 
-  // Tratar possíveis erros do fetch
-
-  // Impedir que duas perguntas iguais ocorram em sequencia
-
-  // Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
-
-  // Disparar timer somente após fetch retornar response.ok
-
-  // Ou ainda tentar verificar se response emite algum tempo para então inseri-no no timer de setTimeOut
-
-  // Slow 3g bandeiras não são renderizadas
-
-  // Fast 3g país da resposta correta sempre tem delay denunciando qual a resposta certa
-  
-  // response.ok && 500ms
 
   getRandomQuestion() {
     randomQuestionNum = randomNumFrom(allQuestions);
+    
+    while (randomQuestionNum === latestQuestion) {
+      console.log("Uma pergunta seria igual a anterior")
+      randomQuestionNum = randomNumFrom(allQuestions);
+    };
 
-    // DEBUG ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
+    latestQuestion = randomQuestionNum;
+    // DEBUG P/ ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
     // 0 - De qual país é essa bandeira
     // 1 - Qual a capital desse país
     // 2 - Nomeie um país que faça fronteira com este
@@ -123,7 +117,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
     // console.log(randomQuestionNum);
-    // randomQuestionNum = 2;
+    randomQuestionNum = 5;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -138,7 +132,7 @@ const quiz = {
   },
   
 
-  getCountry() {
+  getCountries() {
     
     let temp = new Set();
 
@@ -155,6 +149,7 @@ const quiz = {
     };
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
+    // currentCountries = ["United Kingdom"];
     currentCountries = [...temp];
 
     this.fetchCountry(currentCountries);
@@ -166,6 +161,25 @@ const quiz = {
     flagPlaceHolders.forEach((element, index) => {
       element.src = currentCountries[index].flag;
     });
+  },
+
+  chooseCountry(containers) {
+
+    
+    
+    containers.forEach((container, index) => {
+
+      container.addEventListener("click", function(event) {
+
+        const userSelection = currentQuestion.querySelector(".choose__container--user__guess");
+        userSelection?.classList.remove("choose__container--user__guess");
+
+        this.classList.add("choose__container--user__guess");
+
+      });
+
+    });
+
   },
   
 
@@ -182,6 +196,13 @@ const quiz = {
     // Obter placeholder do nome do país na pergunta (pode não haver)
     questionPlaceholder = currentQuestion.querySelector(".question__placeholder");
     
+    // Obter containers para seleção de bandeira (pode não haver)
+    chooseContainers = currentQuestion.querySelectorAll(".choose__container"); 
+
+    if (chooseContainers.length > 0) {
+      this.chooseCountry(chooseContainers);
+    };
+
     // Obter número de bandeiras para definir quantas fetchs faremos
     flagPlaceHolders = currentQuestion.querySelectorAll(".flag__img");
 
@@ -189,11 +210,10 @@ const quiz = {
     currentCountries = null;
     
     // Obtendo país(es)
-    this.getCountry();
+    this.getCountries();
       
-    // Lembrando que:
+    // Lembrando que: setTimeOut também é assíncrono
     // Arrow function não possui sua própria this keyword
-    // setTimeOut também é assíncrono
     setTimeout(() => {
 
       // Selecionando país que será a resposta correta
@@ -206,10 +226,9 @@ const quiz = {
       // Colocando nome do país nas questões com question__placeholder
       if (questionPlaceholder && !questionPlaceholder.textContent.includes("Berlin")) {
 
-        // Países eventualmente vem com nomes compostos, exemplo "plurinational state of bolivia"
+        // Países eventualmente vem com nomes compostos, exemplo:
+        // "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND"
         // find abaixo resolve isso
-
-        // Nomes nem sempre estão aparecendo corretamente, testar
         
         let countryName =
           countries.allCountries
@@ -220,6 +239,7 @@ const quiz = {
         questionPlaceholder.textContent =
           correctCountry.name === "India" ? correctCountry.name : countryName
         ;
+
       };
       
       if (questionPlaceholder?.textContent.includes("Berlin")) {
@@ -262,7 +282,7 @@ playButton.addEventListener("click", function(event) {
   // Escondendo Splash Screen 
   splashScreen.classList.add("hide__all");
   
-  // Escondendo mainContainer
+  // Alternando mainContainer splash screen => pergunta aleatória
   quiz.toggleHidden();
 
   quiz.loadQuestion();
@@ -272,8 +292,25 @@ playButton.addEventListener("click", function(event) {
 
 
 
+// Tratar possíveis erros do fetch
 
+// Pergunta com apenas uma bandeira e perguntando nome do país tenderá a ter mais chance de ter países medium e hard level
 
+// Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
+
+// Disparar timer somente após fetch retornar response.ok
+
+// Ou ainda tentar verificar se response emite algum tempo para então inseri-no no timer de setTimeOut
+
+// Slow 3g bandeiras não são renderizadas
+
+// Fast 3g país da resposta correta sempre tem delay denunciando qual a resposta certa
+
+// response.ok && 500ms
+
+// Aperta enter começa jogo na tela inicial
+
+// Remover opções do botão direito nas imagens das bandeiras
 
 
 

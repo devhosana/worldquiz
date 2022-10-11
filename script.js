@@ -97,6 +97,8 @@ const quiz = {
 
   // Tratar possíveis erros do fetch
 
+  // Impedir que duas perguntas iguais ocorram em sequencia
+
   // Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
 
   // Disparar timer somente após fetch retornar response.ok
@@ -121,7 +123,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
     // console.log(randomQuestionNum);
-    // randomQuestionNum = 3;
+    // randomQuestionNum = 2;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -153,7 +155,6 @@ const quiz = {
     };
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    // currentCountries = ["Italy"];
     currentCountries = [...temp];
 
     this.fetchCountry(currentCountries);
@@ -207,14 +208,16 @@ const quiz = {
 
         // Países eventualmente vem com nomes compostos, exemplo "plurinational state of bolivia"
         // find abaixo resolve isso
+
+        // Nomes nem sempre estão aparecendo corretamente, testar
         
         let countryName =
-        countries.allCountries
-        .find(country => correctCountry.name.includes(country))
+          countries.allCountries
+          .find(country => correctCountry.name.includes(country))
         ;
         
         // No caso da Índia ocorre o contrário, nome que é feito o fetch é composto e correctCountry.name é o que queremos
-        questionPlaceholder.textContent = 
+        questionPlaceholder.textContent =
           correctCountry.name === "India" ? correctCountry.name : countryName
         ;
       };

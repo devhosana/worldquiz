@@ -27,7 +27,6 @@ let chooseContainers;
 let playerAnswer;
 
 let timeOver = false;
-let playing = false;
 let currentQuestionNumber = 0;
 
 const quiz = {
@@ -101,8 +100,13 @@ const quiz = {
         clearTimeout(timer);
         timeOver = true;
 
-        // Parei aqui, já é possível comparar respostas (:
-        console.log(correctCountry.name.toLowerCase() === playerAnswer);
+        console.log(`Resposta jogador: ${playerAnswer}`);
+        console.log(`Resposta certa: ${correctCountry.name.toLowerCase()}`);
+
+        // Obter primeira e última letra da resposta e usar slice parar retirar país de correctCountry.name
+        // e então comparar o que foi recortado com resposta do jogador
+        
+        console.log(correctCountry.name.toLowerCase().includes(playerAnswer));
       };
 
     }, duration);
@@ -112,7 +116,6 @@ const quiz = {
 
   getRandomQuestion() {
     randomQuestionNum = randomNumFrom(allQuestions);
-    console.log(randomQuestionNum);
     
     while (randomQuestionNum === latestQuestion) {
       randomQuestionNum = randomNumFrom(allQuestions);
@@ -128,7 +131,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
     // console.log(randomQuestionNum);
-    // randomQuestionNum = 0;
+    randomQuestionNum = 0;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -160,7 +163,7 @@ const quiz = {
     };
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    // currentCountries = ["United Kingdom"];
+    // currentCountries = ["united kingdom"];
     currentCountries = [...temp];
 
     this.fetchCountry(currentCountries);

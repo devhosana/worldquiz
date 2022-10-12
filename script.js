@@ -26,6 +26,7 @@ let randomQuestionNum;
 let chooseContainers;
 let playerAnswer;
 
+let timeOver = false;
 let playing = false;
 let currentQuestionNumber = 0;
 
@@ -96,7 +97,14 @@ const quiz = {
 
       if (time <= 30) currentProgressBar.style.backgroundColor = "rgba(220, 20, 60, 0.75)";
 
-      if (time <= 0) clearTimeout(timer);
+      if (time <= 0) {
+        clearTimeout(timer);
+        timeOver = true;
+
+        // Parei aqui, já é possível comparar respostas (:
+        console.log(correctCountry.name.toLowerCase() === playerAnswer);
+      };
+
     }, duration);
 
   },
@@ -104,6 +112,7 @@ const quiz = {
 
   getRandomQuestion() {
     randomQuestionNum = randomNumFrom(allQuestions);
+    console.log(randomQuestionNum);
     
     while (randomQuestionNum === latestQuestion) {
       randomQuestionNum = randomNumFrom(allQuestions);
@@ -119,7 +128,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Alemanha?
 
     // console.log(randomQuestionNum);
-    randomQuestionNum = 0;
+    // randomQuestionNum = 0;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -169,6 +178,8 @@ const quiz = {
     containers.forEach((container, index) => {
 
       container.addEventListener("click", function(event) {
+        if (timeOver) return;
+
         const userSelection = currentQuestion.querySelector(".choose__container--user__choose");
         userSelection?.classList.remove("choose__container--user__choose");
         this.classList.add("choose__container--user__choose");
@@ -178,11 +189,10 @@ const quiz = {
   },
 
   storeAnswer() {
-    currentInput = currentQuestion.querySelector(".input__answer");
+    currentInput = currentQuestion?.querySelector(".input__answer");
     
-    currentInput.addEventListener("input", function(event) {
-      playerAnswer = event.target.value.trim();
-      console.log(playerAnswer);
+    currentInput?.addEventListener("input", function(event) {
+      playerAnswer = event.target.value.trim().toLowerCase();
     });
     
   },
@@ -206,10 +216,8 @@ const quiz = {
 
     correctCountry;
 
-    // Gerando pergunta aleatória
     this.getRandomQuestion();
 
-    // Aumentando pergunta
     this.increaseQuestionNumber();
 
     // Obter placeholder do nome do país na pergunta (pode não haver)
@@ -228,7 +236,6 @@ const quiz = {
     // Limpar países anteriormente randomizados
     currentCountries = [];
     
-    // Obtendo país(es)
     this.getCountries();
       
     // Lembrando que: setTimeOut também é assíncrono
@@ -267,10 +274,8 @@ const quiz = {
       // Mostrando pergunta randomizada
       currentQuestion.classList.remove("hide__all");
 
-      // Exibindo bandeira(s)
       this.renderFlag();
 
-      // Armazenar resposta jogador
       this.storeAnswer();
 
       // Iniciando Timer - 325ms === +/- 7 segundos

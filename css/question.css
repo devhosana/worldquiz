@@ -37,23 +37,23 @@
   letter-spacing: -0.6px;
 }
 
-.choose__container {
+.choice__container {
   transition: all 0.25s;
   padding: 0.6rem;
   border-radius: 5px;
 }
 
-.choose__container--user__choose {
+.choice__container--user__choice {
   background-color: rgba(250, 250, 210, 0.75);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.choose__container--wrong__option {
+.choice__container--wrong__option {
   background-color: rgb(240, 128, 128, 0.75);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.choose__container--correct__option {
+.choice__container--correct__option {
   background-color: rgba(199, 243, 199, 0.75);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }

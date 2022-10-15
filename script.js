@@ -23,6 +23,7 @@ let currentCountries;
 let currentNeighbours = [];
 let correctCountry;
 let flagPlaceHolders;
+let flagsContainer;
 let randomQuestionNum;
 let allChoiceContainers;
 let playerAnswer;
@@ -80,7 +81,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
     // console.log(randomQuestionNum);
-    randomQuestionNum = 0;
+    randomQuestionNum = 5;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -111,10 +112,10 @@ const quiz = {
       temp.add(currentCountry);
     };
     
-    // currentCountries = [...temp];
+    currentCountries = [...temp];
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    currentCountries = ["Czech republic"];
+    // currentCountries = ["Czech republic"];
 
     this.fetchCountry(currentCountries);
 
@@ -138,14 +139,13 @@ const quiz = {
 
   storeAnswer() {
 
-    const flagsContainer = currentQuestion.querySelector(".flags__container--2");
-    const currentInput = currentQuestion.querySelector(".input__answer");
+    flagsContainer = currentQuestion.querySelector(".flags__container--2");
+    currentInput = currentQuestion.querySelector(".input__answer");
 
     let previousUserSelection;
     
     // Se pergunta for com resposta selecionável
     if (flagsContainer) {
-      
       flagsContainer.addEventListener("click", function(event) {
         
         // Se tempo acabar não permitir seleção
@@ -162,7 +162,6 @@ const quiz = {
         };
         
       });
-      
     };
     
     // Se for com input
@@ -211,6 +210,26 @@ const quiz = {
 
   },
 
+  highLightElement(element) {
+
+    setTimeout(() => {
+      element.classList.toggle("choice__container--correct__option");
+      return setTimeout(() => {
+        element.classList.toggle("choice__container--correct__option");
+        return setTimeout(() => {
+          element.classList.toggle("choice__container--correct__option");
+          return setTimeout(() => {
+            element.classList.toggle("choice__container--correct__option");
+            return setTimeout(() => {
+              element.classList.toggle("choice__container--correct__option");
+            }, 250);
+          }, 250)
+        }, 250)
+      }, 250);
+    }, 250);
+
+  },
+
   revealCorrectAnswer() {
 
     // Futuramente respostas corretas serão todas reveladas, nas que contém input e nas de múltipla escolha
@@ -222,7 +241,22 @@ const quiz = {
     };
 
     if (randomQuestionNum === 5 || randomQuestionNum === 3) {
-      // Estava aqui, adicionar classe de resposta correta à choice container com país correto                                                              
+                                                                 
+      let correctOption = Array.from(flagPlaceHolders)
+        .find(element => element.src === correctCountry.flags.svg)
+        .closest(".choice__container")
+      ;
+
+      // Parei aqui, faltar remover classe de resposta errada, seleção e resposta certa
+      if (playerAnswer && playerAnswer === correctOption) {
+        document.querySelector(".choice__container--user__choice")?.classList.remove("choice__container--user__choice");
+      };
+
+      if (playerAnswer !== correctOption) {
+        playerAnswer.classList.add("choice__container--wrong__option");
+      };
+
+      this.highLightElement(correctOption);
 
     };
       
@@ -230,10 +264,8 @@ const quiz = {
 
   initTimer(duration) {
 
-    // Esconder campo da resposta correta
+    // Esconder campo da resposta correta se pergunta for a primeira
     if (currentQuestion === allQuestions[0]) questionPlaceholder.classList.add("hide__correct");
-
-
 
     const currentProgressBar = currentQuestion.querySelector(".progress__bar");
     currentProgressBar.style.backgroundColor = "rgba(78, 248, 10, 0.75)";
@@ -258,7 +290,7 @@ const quiz = {
             this.toggleHidden();
             this.loadQuestion();
           };
-        }, 1000);
+        }, 2000);
         
       };
 
@@ -268,23 +300,24 @@ const quiz = {
 
   resetForNewQuestion() {
 
-    console.log(currentQuestion);
     currentQuestion.classList.add("hide__all");
+
+    document.querySelector(".choice__container--correct__option").classList.remove("choice__container--correct__option");
     
     // correctCountry = null;
-
-    document.querySelector(".choice__container--user__choice")?.classList.remove("choice__container--user__choice");
 
     // Limpar países anteriormente randomizados e vizinhos
     currentCountries = [];
 
     currentNeighbours = [];
 
+    flagsContainer = undefined;
+
     timeOver = false;
 
-    if (currentInput) {
-      currentInput.value = playerAnswer = "";
-    };
+    playerAnswer = undefined;
+
+    if (currentInput) currentInput.value = ""; 
     
   },
 

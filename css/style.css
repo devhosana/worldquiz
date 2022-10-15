@@ -166,6 +166,7 @@ body {
 
 
 footer {
+  transform: translatey(32%);
   padding: 1.6rem;
 }
 

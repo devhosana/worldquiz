@@ -38,10 +38,8 @@ const quiz = {
       fetch(`https://restcountries.com/v3.1/alpha/${country}`)
         .then(response => response.json())
         .then(data => currentNeighbours.push(data[0].name.common.toLowerCase()))
-        // DEBUG P/ RESPOSTA 2
-        .finally(() => console.log(`Possíveis respostas corretas:`, ...currentNeighbours))
       ;
-    });
+    })
 
   },
 
@@ -69,9 +67,7 @@ const quiz = {
   getRandomQuestion() {
     randomQuestionNum = randomNumFrom(allQuestions);
     
-    while (randomQuestionNum === latestQuestion) {
-      randomQuestionNum = randomNumFrom(allQuestions);
-    };
+    while (randomQuestionNum === latestQuestion) randomQuestionNum = randomNumFrom(allQuestions);
 
     latestQuestion = randomQuestionNum;
     // DEBUG P/ ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
@@ -83,7 +79,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
     // console.log(randomQuestionNum);
-    randomQuestionNum = 2;
+    // randomQuestionNum = 0;
 
     currentQuestion = allQuestions[randomQuestionNum];
   },
@@ -115,7 +111,8 @@ const quiz = {
     };
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    // currentCountries = ["Czech Republic"];
+    // currentCountries = ["Brazil"];
+
     currentCountries = [...temp];
 
     this.fetchCountry(currentCountries);
@@ -151,8 +148,11 @@ const quiz = {
     if (currentQuestion.querySelector(".flags__container--2")) {
 
       document.addEventListener("click", function(event) {
-        // Short circuit aqui é para caso usuário clique bem na extremidade do choice__container
-        playerAnswer = event.target.closest(".flag__img") || event.target.querySelector(".flag__img");
+        if (event.target.classList.contains("flag__img") || event.target.classList.contains("choose__container")) {
+          // Short circuit aqui é para caso usuário clique bem na extremidade do choice__container
+          playerAnswer = event.target.closest(".flag__img") || event.target.querySelector(".flag__img");
+        };
+
       });
 
     } else {
@@ -165,15 +165,26 @@ const quiz = {
     
   },
 
+  normalizeString(str) {
+    const newStr = str
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+    ;
+
+    return newStr;
+  },
+
 
   verifyAnswer() {
 
     if (randomQuestionNum === 0) {
-      if (playerAnswer === correctCountry.name.common.toLowerCase()) return true;
+      if (this.normalizeString(playerAnswer) === this.normalizeString(correctCountry.name.common)) return true;
     };
     
     if (randomQuestionNum === 1) {
-      if (playerAnswer === correctCountry.capital[0].toLowerCase()) return true;
+      if (this.normalizeString(playerAnswer) === this.normalizeString(correctCountry.capital[0])) return true;
     }
     
     if (randomQuestionNum === 2) {
@@ -185,12 +196,28 @@ const quiz = {
     };
     
     if (randomQuestionNum === 4) {
-      if (playerAnswer === correctCountry.region.toLowerCase()) return true;
+      if (this.normalizeString(playerAnswer) === this.normalizeString(correctCountry.region)) return true;
+    };
+
+  },
+
+  revealCountry() {
+
+    if (!currentQuestion === allQuestions[0]) return;
+
+    if (!timeOver) {
+      questionPlaceholder.classList.add("hide__correct");
+    } else {
+      questionPlaceholder.textContent = correctCountry.name.common;
+      questionPlaceholder.classList.remove("hide__correct");
     };
 
   },
 
   initTimer(duration) {
+
+    // Esconder resposta correta
+    this.revealCountry();
 
     const currentProgressBar = currentQuestion.querySelector(".progress__bar");
     currentProgressBar.style.backgroundColor = "rgba(78, 248, 10, 0.75)";
@@ -206,10 +233,17 @@ const quiz = {
         clearTimeout(timer);
         timeOver = true;
 
-        if (this.verifyAnswer()) {
-          this.toggleHidden();
-          this.loadQuestion();
-        };
+        // Esconder resposta correta
+        this.revealCountry();
+
+        setTimeout(() => {
+
+          if (this.verifyAnswer()) {
+            this.toggleHidden();
+            this.loadQuestion();
+          };
+
+        }, 2000)
         
       };
 
@@ -217,17 +251,36 @@ const quiz = {
 
   },
 
+  resetForNewQuestion() {
+
+    currentQuestion?.classList.add("hide__all");
+    
+    // correctCountry = null;
+    
+    document.querySelector(".choice__container--user__choice")?.classList.remove("choice__container--user__choice");
+
+    // Limpar países anteriormente randomizados e vizinhos
+    currentCountries = [];
+
+    currentNeighbours = [];
+
+    timeOver = false;
+
+    if (currentInput) {
+      currentInput.value = playerAnswer = "";
+    };
+    
+  },
+
 
   loadQuestion() {
 
-    correctCountry = null;
-
-    document.querySelector(".choice__container--user__choice")?.classList.remove("choice__container--user__choice");
+    this.resetForNewQuestion();
 
     this.getRandomQuestion();
 
     // Obter placeholder do nome do país na pergunta (pode não haver)
-    questionPlaceholder = currentQuestion.querySelector(".question__placeholder");
+    questionPlaceholder = currentQuestion.querySelector(".question__placeholder")
     
     // Obter containers para seleção de bandeira (pode não haver)
     allChoiceContainers = currentQuestion.querySelectorAll(".choice__container"); 
@@ -238,23 +291,12 @@ const quiz = {
 
     // Obter número de bandeiras para definir quantas fetchs faremos
     flagPlaceHolders = currentQuestion.querySelectorAll(".flag__img");
-
-    // Limpar países anteriormente randomizados e vizinhos
-    currentCountries = [];
-
-    currentNeighbours = [];
     
     this.getCountries();
       
     // Lembrando que: setTimeOut também é assíncrono
     // Arrow function não possui sua própria this keyword
     setTimeout(() => {
-
-      timeOver = false;
-
-      if (currentInput) {
-        currentInput.value = playerAnswer = "";
-      };
 
       this.increaseQuestionNumber();
 
@@ -263,20 +305,23 @@ const quiz = {
       // Selecionando país que será a resposta correta
       if (currentCountries.length > 1) {
         correctCountry = currentCountries[randomNumFrom(currentCountries)];
+
+        // Repúplica Tcheca .common tem um nome diferente do restante (Czechia) 
+        if (correctCountry.name.common === "Czechia") correctCountry.name.common = "Czech Republic";
       };
 
-      // Se pergunta for sobre capital, senão o else serve para todas as outras perguntas      
+      // Se pergunta for sobre capital, senão o else serve para todas as outras perguntas     
       if (currentQuestion === allQuestions[3]) {
         questionPlaceholder.textContent = correctCountry.capital[0];
       } else {
-  
-        // Repúplica Tcheca .common tem um nome diferente do restante (Czechia) 
-        if (correctCountry.name.common === "Czechia") correctCountry.name.common = "Czech Republic";
-  
-        if (questionPlaceholder) questionPlaceholder.textContent = correctCountry.name.common;
+
+        // Se pergunta atual NÃO for a primeira (pergunta só será inserida quando tempo acabar)
+        if (!currentQuestion === allQuestions[0]) {
+          questionPlaceholder.textContent = correctCountry.name.common;
+        };
       };
 
-      // Mostrando pergunta randomizada
+      // Pergunta aleatória aparece
       currentQuestion.classList.remove("hide__all");
 
       this.renderFlag();
@@ -284,7 +329,10 @@ const quiz = {
       this.storeAnswer();
 
       // Iniciando Timer - 325ms === +/- 7 segundos
-      this.initTimer(325);
+      this.initTimer(300);
+
+      // DEBUG P/ RESPOSTA 2
+      // currentNeighbours.forEach(country => console.log(country));
 
       // Colocando cursor diretamente no campo da resposta (pode não haver)
       currentQuestion.querySelector(".input__answer")?.focus();
@@ -300,7 +348,7 @@ const quiz = {
 
 /////////////////////////////////////////////////////
 
-playButton.addEventListener("click", function(event) {
+playButton.addEventListener("click", function() {
 
   // Escondendo Splash Screen 
   splashScreen.classList.add("hide__all");
@@ -312,8 +360,9 @@ playButton.addEventListener("click", function(event) {
 
 });
 
+// função fetch ser uma somente apenas mudando url conforme for para países ou vizinhos
 
-
+// Pergunta de capitais só sortear países médios e fáceis
 
 // Tratar possíveis erros do fetch
 
@@ -348,7 +397,11 @@ playButton.addEventListener("click", function(event) {
 // Implementar "tricky questions" exemplo:
 // Fazer isso se jogador acertar muitas seguidas
 
-// Pergunta 4 está MUITO fácil, independente do país
+// Ajustar footer
+
+// Remover países que já foram sorteados independente da pergunta e colocar numa array, para depois readiciona-los quando partida começar
+
+// Pergunta 4 está MUITO fácil, independente do país => mudar p/ "qual destes países pertence ao continente africano" ou algo assim
 
 // tunisia X turquia
 // bandeira puerto rico X cuba

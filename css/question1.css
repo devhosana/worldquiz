@@ -7,3 +7,11 @@
   width: 41.25rem;
   height: 23.37rem;
 }
+
+.hide__correct {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  
+  transform: rotate3d(1, 0, 0, 90deg);
+}

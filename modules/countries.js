@@ -28,7 +28,7 @@ const countries = {
     "Portugal",
     "Denmark",
     "Australia",
-    "China",
+    // "China",
     "Republic of India",
   ],
 
@@ -56,12 +56,12 @@ const countries = {
     "Paraguay",
     "New Zealand",
     "Mozambique",
-    "Puerto Rico"
+    "Puerto Rico",
+    "Egypt",
   ],
   
   hardLevel: [
     "Monaco",
-    "Egypt",
     "Costa Rica",
     "Peru",
     "Angola",
@@ -87,7 +87,7 @@ const countries = {
     "Senegal",
     "Iraq",
     "Hungary",
-    "Tanzania"
+    "Tanzania",
   ],
 
 

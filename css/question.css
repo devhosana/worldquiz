@@ -36,7 +36,7 @@
 }
 
 .choice__container {
-  transition: all 0.25s;
+  transition: all 0.3s;
   padding: 0.6rem;
   border-radius: 5px;
 }
@@ -47,12 +47,12 @@
 }
 
 .choice__container--wrong__option {
-  background-color: rgb(240, 128, 128, 0.75);
+  background-color: rgba(230, 109, 109, 0.75);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .choice__container--correct__option {
-  background-color: rgba(110, 228, 106, 0.75);
+  background-color: rgba(59, 221, 53, 0.75);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 

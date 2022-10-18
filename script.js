@@ -509,20 +509,3 @@ playButton.addEventListener("click", function() {
 // Obter primeira e última letra da resposta e usar slice parar retirar país de correctCountry.name
 // e então comparar o que foi recortado com resposta do jogador
 // verificar alt spellings para comparar input com nome do país
-
-// Tentar incluir coreia do sul e do norte depois de implementar v3.1
-
-
-
-/*
-
-const foo = function() {
-  fetch("https://restcountries.com/v3.1/alpha/kor")
-    .then(response => response.json())
-    .then(data => console.log(data))
-  ;
-};
-
-foo();
-
-*/

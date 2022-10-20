@@ -80,8 +80,8 @@ const quiz = {
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
-    randomQuestionNum = 2;
-    // console.log(randomQuestionNum);
+    // randomQuestionNum = 2;
+    console.log(randomQuestionNum);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
@@ -117,6 +117,7 @@ const quiz = {
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
     // currentCountries = [countries.easyLevel[0]];
+    console.log(currentCountries);
 
     this.fetchCountry(currentCountries);
 
@@ -181,8 +182,11 @@ const quiz = {
   
   rightOrWrong(text) {
     const inputField = currentQuestion.querySelector(".input__answer");
-    inputField.value = "";
-    inputField.placeholder = text;
+
+    if (inputField) {
+      inputField.value = "";
+      inputField.placeholder = text;
+    };
   },
 
 
@@ -215,9 +219,11 @@ const quiz = {
       if (playerAnswer === this.normalizeString(correctCountry.region)) isCorrect = true;
     };
 
-    // Ternary operator acontecerá ou short circuiting
-    this.rightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
-    playerAnswer || this.rightOrWrong("No answer");
+    // Ternary operator acontecerá ou short circuiting 
+    if (randomQuestionNum <= 2 || randomQuestionNum === 5) {
+      this.rightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
+      playerAnswer || this.rightOrWrong("No answer");
+    };
 
     return isCorrect;
 
@@ -368,8 +374,6 @@ const quiz = {
     if (currentQuestionNumber > 0) this.resetForNewQuestion();
     
     this.getRandomQuestion();
-    
-
 
     // Obter placeholder do nome do país na pergunta (pode não haver)
     questionPlaceholder = currentQuestion.querySelector(".question__placeholder")
@@ -486,7 +490,7 @@ playButton.addEventListener("click", function() {
 
 // Se país A foi sorteado em pergunta X, não sortear mais este mesmo país quando esta pergunta aparecer novamente
 
-
+// Futuramente remover OR da linha 223 pq pergunta 5 se tornará de múltipla escolha
 
 // Ajustar footer
 
@@ -522,6 +526,5 @@ playButton.addEventListener("click", function() {
 // Hungria X ITalia
 // Russia X luxemburgo
 // Islandia X Noruega X Suécia X Finlandia X Dinamarca
-
 
 

@@ -36,7 +36,6 @@ let currentQuestionNumber = 0;
 
 const quiz = {
 
-
   fetchCountry(countries, neighbours) {
     countries.forEach((country, index) => {
 
@@ -117,7 +116,7 @@ const quiz = {
     currentCountries = [...temp];
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    // currentCountries = ["Iran"];
+    // currentCountries = [countries.easyLevel[0]];
 
     this.fetchCountry(currentCountries);
 
@@ -179,36 +178,48 @@ const quiz = {
     return newStr;
   },
 
+  
+  rightOrWrong(text) {
+    const inputField = currentQuestion.querySelector(".input__answer");
+    inputField.value = "";
+    inputField.placeholder = text;
+  },
+
 
   verifyAnswer() {
 
+    let isCorrect = false;
+
     if (randomQuestionNum === 0) {
-      if (playerAnswer === this.normalizeString(correctCountry.name.common)) return true;
+      if (playerAnswer === this.normalizeString(correctCountry.name.common)) isCorrect = true;
     };
     
     if (randomQuestionNum === 1) {
-      if (playerAnswer === this.normalizeString(correctCountry.capital[0])) return true;
+      if (playerAnswer === this.normalizeString(correctCountry.capital[0])) isCorrect = true;
     }
     
     if (randomQuestionNum === 2) {
-
-      const isCorrect = 
+      isCorrect = 
         currentNeighbours.some(neighbour => {
           return this.normalizeString(neighbour.name.common) === playerAnswer;
         })
       ;
-
-      if (isCorrect) return true;
     };
     
     if (randomQuestionNum === 3 || randomQuestionNum === 5) {
       playerAnswer = playerAnswer?.querySelector(".flag__img");
-      if (playerAnswer?.src === correctCountry.flags.svg) return true;
+      if (playerAnswer?.src === correctCountry.flags.svg) isCorrect = true;
     };
     
     if (randomQuestionNum === 4) {
-      if (playerAnswer === this.normalizeString(correctCountry.region)) return true;
+      if (playerAnswer === this.normalizeString(correctCountry.region)) isCorrect = true;
     };
+
+    // Ternary operator acontecerá ou short circuiting
+    this.rightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
+    playerAnswer || this.rightOrWrong("No answer");
+
+    return isCorrect;
 
   },
 
@@ -244,6 +255,9 @@ const quiz = {
       questionPlaceholder.classList.remove("hide__correct");
     };
 
+    // Futuramente, quando pergunta sobre continente for de múltipla escolha
+    // if (randomQuestionNum >= 3) {
+
     if (randomQuestionNum === 5 || randomQuestionNum === 3) {
                                                                  
       let correctOption = Array.from(flagPlaceHolders)
@@ -253,11 +267,9 @@ const quiz = {
 
       if (playerAnswer === correctOption) {
         playerAnswer?.classList.remove("choice__container--user__choice");
-        // document.querySelector(".choice__container--user__choice")?.classList.remove("choice__container--user__choice");
       };
       
       if (playerAnswer !== correctOption) {
-        // playerAnswer?.classList.remove("choice__container--user__choice");
         playerAnswer?.classList.add("choice__container--wrong__option");
       };
       
@@ -318,6 +330,9 @@ const quiz = {
 
     currentQuestion.classList.add("hide__all");
 
+    // Função também é útil p/ resetar campo input
+    this.rightOrWrong("Your answer");
+
     // Colocar IF aqui para que isso ocorra somente se pergunta 3 ou 5 forem as previousQuestion
     const highlight1 = document.querySelector(".choice__container--correct__option");
     const highlight2 =  document.querySelector(".choice__container--wrong__option");
@@ -353,6 +368,8 @@ const quiz = {
     if (currentQuestionNumber > 0) this.resetForNewQuestion();
     
     this.getRandomQuestion();
+    
+
 
     // Obter placeholder do nome do país na pergunta (pode não haver)
     questionPlaceholder = currentQuestion.querySelector(".question__placeholder")
@@ -469,14 +486,13 @@ playButton.addEventListener("click", function() {
 
 // Se país A foi sorteado em pergunta X, não sortear mais este mesmo país quando esta pergunta aparecer novamente
 
-// Implementar "tricky questions" exemplo:
-// Fazer isso se jogador acertar muitas seguidas
+
 
 // Ajustar footer
 
 // Remover países que já foram sorteados independente da pergunta e colocar numa array, para depois readiciona-los quando partida começar
 
-// Pergunta 4 está MUITO fácil, independente do país => selecionar o país que pertence ao continente africano" ou algo assim
+// Pergunta 4 está MUITO fácil, independente do país, mudar p/ => selecionar o país que pertence ao continente africano" ou algo assim
 
 // Quando tempo terminar campo input retorna feedback se jogador acertou ou errou
 
@@ -489,11 +505,14 @@ playButton.addEventListener("click", function() {
 // You can filter the output of your request to include only the specified fields.
 // https://restcountries.com/v2/all?fields=name,capital,currencies
 
+// Implementar "tricky questions" exemplo:
+// Fazer isso se jogador acertar muitas seguidas
+
 // tunisia X turquia
 // bandeira puerto rico X cuba
 // australia X nova zelandia
 // monaco X polonia X indonesia X gronelandia X singapura
-// Romeniax chade (chade ainda não está incluído)
+// Romenia X chade (chade ainda não está incluído)
 // Filipinas X república tcheca
 // Mexico X itália 
 // Ecuador X colombia X venezuela
@@ -506,6 +525,3 @@ playButton.addEventListener("click", function() {
 
 
 
-// Obter primeira e última letra da resposta e usar slice parar retirar país de correctCountry.name
-// e então comparar o que foi recortado com resposta do jogador
-// verificar alt spellings para comparar input com nome do país

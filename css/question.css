@@ -1,4 +1,5 @@
-.inner__container--question {
+.inner__container--question,
+.inner__container--next {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 20fr 65fr 15fr;

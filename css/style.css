@@ -214,9 +214,28 @@ body::after {
 */
 
 
+.next__question {
 
+}
 
+.next__container {
+  grid-row: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.6rem;
+  cursor: pointer;
+}
 
+.next__text {
+  font-size: 4.8rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.next__icon {
+  font-size: 6.4rem;
+}
 
 
 

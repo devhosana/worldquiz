@@ -81,7 +81,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
     // randomQuestionNum = 2;
-    console.log(randomQuestionNum);
+    // console.log(randomQuestionNum);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
@@ -117,7 +117,7 @@ const quiz = {
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
     // currentCountries = [countries.easyLevel[0]];
-    console.log(currentCountries);
+    // console.log(currentCountries);
 
     this.fetchCountry(currentCountries);
 
@@ -313,8 +313,10 @@ const quiz = {
 
           // Delay para verificar resposta correta e então carregar nova pergunta
           setTimeout(() => {
+
             this.toggleHidden();
             this.loadQuestion();
+            
           }, 1800);
         }; 
 
@@ -499,6 +501,8 @@ playButton.addEventListener("click", function() {
 // Pergunta 4 está MUITO fácil, independente do país, mudar p/ => selecionar o país que pertence ao continente africano" ou algo assim
 
 // Quando tempo terminar campo input retorna feedback se jogador acertou ou errou
+
+// Impedir de digitar após apresentar, right, wrong ou no answer
 
 // Reembaralhar array dos países a cada pergunta
 

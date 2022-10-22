@@ -33,6 +33,7 @@ let score = 0;
 
 let timeOver = false;
 let currentQuestionNumber = 0;
+ 
 
 const quiz = {
 
@@ -264,6 +265,7 @@ const quiz = {
 
   },
 
+
   // Promissificar isso posteriormente
   highlightOption(element) {
 
@@ -320,6 +322,7 @@ const quiz = {
       
   },
 
+
   evaluateAndAdvance() {
 
     this.revealCorrectAnswer();
@@ -363,6 +366,7 @@ const quiz = {
 
   },
 
+
   obtainCorrectCountry() {
 
     if (currentCountries.length === 1) {
@@ -394,11 +398,15 @@ const quiz = {
 
   },
 
+  shuffleCountries() {
+    countries.allCountries.sort(() => Math.random() - 0.5);
+  },
+
 
   newGame() {
     score = 0;
     this.resetForNewQuestion();
-  }, 
+  },
 
 
   resetForNewQuestion() {
@@ -446,6 +454,8 @@ const quiz = {
     
     this.increaseQuestionNumber();
     
+    this.shuffleCountries();
+
     this.getCountries();
 
     // Parei aqui, algumas coisas apresentam erro agora que dispensamos setTimeOut
@@ -458,13 +468,7 @@ const quiz = {
 
         this.obtainCorrectCountry();
 
-        // console.log("Antes");
-        // console.log([...countries.easyLevel, ...countries.mediumLevel, ...countries.hardLevel]);
-        
         this.removeCurrentCorrectCountry(correctCountry.cca3);
-        
-        // console.log("Depois");
-        // console.log([...countries.easyLevel, ...countries.mediumLevel, ...countries.hardLevel]);
 
         // Pergunta aleatória aparece
         currentQuestion.classList.remove("hide__all");
@@ -578,3 +582,4 @@ playButton.addEventListener("click", function() {
 // Islandia X Noruega X Suécia X Finlandia X Dinamarca
 
 
+quiz.shuffleCountries();

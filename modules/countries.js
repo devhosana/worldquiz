@@ -4,7 +4,7 @@ let latestCurrentCountry;
 
 const countries = {
 
-  easyLevel: [
+  allCountries: [
     {code: "ITA", island: false},
     {code: "CAN", island: false},
     {code: "USA", island: false}, 
@@ -20,7 +20,8 @@ const countries = {
     {code: "MEX", island: false},
     {code: "IRL", island: true},
     {code: "JPN", island: true},
-    {code: "CHE", island: false},
+    // Ajusta tamanho bandeira suiça depois
+    // {code: "CHE", island: false},
     {code: "RUS", island: false},
     {code: "POL", island: false},
     {code: "NLD", island: false},
@@ -31,9 +32,6 @@ const countries = {
     {code: "CHN", island: false},
     {code: "IND", island: false},
     {code: "KOR", island: false},
-  ],
-  
-  mediumLevel: [
     {code: "PRK", island: false},
     {code: "COL", island: false},
     {code: "VEN", island: false},
@@ -58,9 +56,6 @@ const countries = {
     {code: "MOZ", island: false},
     {code: "PRI", island: true},
     {code: "EGY", island: false},
-  ],
-  
-  hardLevel: [
     {code: "GHA", island: false},
     {code: "CRI", island: false},
     {code: "PER", island: false},
@@ -87,44 +82,8 @@ const countries = {
   ],
 
 
-  get levels() {
-    const allLevels = [
-      this.easyLevel,
-      this.mediumLevel,
-      this.hardLevel,
-    ];
-
-    return allLevels;
-  },
-
-  
-  get allCountries() {
-    return this.levels.flat();
-  },
-
-  randomLevel() {
-    const level = randomNumFrom(this.levels);
-    return level;
-  },
-
-  
-  pickDifficulty(level = this.randomLevel()) {
-    const difficultyArr = this.levels[level];
-    return difficultyArr;
-  },
-  
-
-  getRandomCountry(level) {
-    // P/ DEBUG ESCOLHER DIFICULDADE 
-    // 0 - Países dificuldade fácil
-    // 1 - Países dificuldade média
-    // 2 - Países dificuldade díficil
-
-    // const difficultyLeveL = 1;
-
-    const difficultyLevel = this.pickDifficulty(level);
-    let country = difficultyLevel[randomNumFrom(difficultyLevel)];
-
+  getRandomCountry() {
+    let country = this.allCountries[randomNumFrom(this.allCountries)];
     return country;
   },
 

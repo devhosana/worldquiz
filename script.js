@@ -104,8 +104,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
     // randomQuestionNum = 3;
-    // Pergunta 5 e 3 dão erro às vezes
-    // console.log(randomQuestionNum);
+    console.log(randomQuestionNum);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
@@ -458,10 +457,10 @@ const quiz = {
 
     this.getCountries();
 
-    // Parei aqui, algumas coisas apresentam erro agora que dispensamos setTimeOut
     this.fetchCountries(currentCountries)
-
-      // Sem setTimeout pergunta 3 quase sempre gera erro em renderFlags, futuramente investigar o que ocorre
+    
+    // Parei aqui, perguntas 3 e 5 apresentam erro intermitente agora que dispensamos setTimeout
+    // Sem setTimeout pergunta 3 quase sempre gera erro em renderFlags, futuramente investigar o que ocorre
       .then(() => {
 
         this.renderFlags();
@@ -486,6 +485,8 @@ const quiz = {
         
         // POR ÚLTIMO exibir novamente mainContainer com tudo carregado
         this.toggleHidden();
+
+        console.log(countries.allCountries);
 
       })
     ;

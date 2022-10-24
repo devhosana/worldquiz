@@ -329,11 +329,15 @@ const quiz = {
 
     if (this.verifyAnswer()) score++;
 
+    // Esse por sua vez será removido pois pretendo promissificar verify answer
     setTimeout(() => {
       this.toggleHidden();
       if (currentQuestionNumber > 0) this.resetForNewQuestion();
-      this.loadQuestion();
-    }, 1600);
+
+      // Futuramente podemos medir a velocidade da internet e diminuir ou mesmo remover esse delay aqui
+      setTimeout(() => this.loadQuestion(), 300);
+
+    }, 1800);
 
   }, 
 
@@ -502,7 +506,7 @@ playButton.addEventListener("click", function() {
   // Escondendo Splash Screen 
   splashScreen.classList.add("hide__all");
   
-  // Alternando mainContainer splash screen => pergunta aleatória
+  // Escondendo mainContainer => exibindo novamente c/ pergunta aleatória
   quiz.toggleHidden();
 
   quiz.loadQuestion();
@@ -511,21 +515,9 @@ playButton.addEventListener("click", function() {
 
 // Pergunta de capitais só sortear países médios e fáceis
 
-// Tratar possíveis erros do fetch
-
 // Pergunta com apenas uma bandeira e perguntando nome do país tenderá a ter mais chance de ter países medium e hard level
 
-// Quando for pergunta sobre fronteiras já fazer fetch de todas as fronteiras para entao ficar pré armazenado ao responder
-
-// Disparar timer somente após fetch retornar response.ok
-
-// Ou ainda tentar verificar se response emite algum tempo para então inseri-no no timer de setTimeOut
-
-// Slow 3g bandeiras não são renderizadas
-
-// Fast 3g país da resposta correta sempre tem delay denunciando qual a resposta certa
-
-// response.ok && 500ms
+// Tratar possíveis erros do fetch
 
 // Aperta enter começa jogo na tela inicial
 
@@ -533,19 +525,13 @@ playButton.addEventListener("click", function() {
 
 // Pontuação não será mais de acordo com tempo restante mas uma pergunta correta === 1 ponto, porque não podemos indicar qual país é o correto assim que jogador selecionar, pois bastaria sair selecionando um por um para descobrir qual a resposta correta nas perguntas sem input
 
-// Load Question está grande demais, diminuir em funções menores
-
 // Opção para perguntar se quer mesmo sair depois de começar a jogar
 
 // Apresentar o nome do país se errar 
 
-// Se país A foi sorteado em pergunta X, não sortear mais este mesmo país quando esta pergunta aparecer novamente
-
 // Futuramente remover OR da linha 223 pq pergunta 5 se tornará de múltipla escolha
 
 // Ajustar footer
-
-// Remover países que já foram sorteados independente da pergunta e colocar numa array, para depois readiciona-los quando partida começar
 
 // Pergunta 4 está MUITO fácil, independente do país, mudar p/ => selecionar o país que pertence ao continente africano" ou algo assim
 
@@ -564,6 +550,8 @@ playButton.addEventListener("click", function() {
 
 // Implementar "tricky questions" exemplo:
 // Fazer isso se jogador acertar muitas seguidas
+
+// Criar função para respostas exceções, como washignton, d.c., czechia, russia estar na europa e na ásia, etc
 
 // Acabei de descobrir que russia faz parte de dois continentes, resolver isso na pergunta sobre continentes
 

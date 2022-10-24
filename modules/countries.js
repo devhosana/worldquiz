@@ -28,7 +28,7 @@ const countries = {
     {code: "BEL", island: false},
     {code: "PRT", island: false},
     {code: "DNK", island: false},
-    {code: "AUS", island: false},
+    {code: "AUS", island: true},
     {code: "CHN", island: false},
     {code: "IND", island: false},
     {code: "KOR", island: false},

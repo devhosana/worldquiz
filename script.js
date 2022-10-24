@@ -10,7 +10,7 @@ const allQuestions = document.querySelectorAll(".select__question");
 const playButton = document.querySelector(".play__button");
 const mainContainer = document.querySelector(".main__container");
 
-console.log("#DEBUGGING");
+// console.log("#DEBUGGING");
 
 //////////////////////
 /// Game Variables ///
@@ -105,7 +105,7 @@ const quiz = {
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
     // randomQuestionNum = 2;
-    console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
+    // console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
@@ -328,13 +328,12 @@ const quiz = {
     this.revealCorrectAnswer();
 
     if (this.verifyAnswer()) score++;
-    console.log(`[ Current score: ${score} ]`);
 
     setTimeout(() => {
       this.toggleHidden();
       if (currentQuestionNumber > 0) this.resetForNewQuestion();
       this.loadQuestion();
-    }, 1500);
+    }, 1600);
 
   }, 
 
@@ -461,9 +460,8 @@ const quiz = {
 
     // Parei aqui, perguntas 3 e 5 apresentam erro intermitente agora que dispensamos setTimeout
     this.fetchCountries(currentCountries)
+      .then(() => this.renderFlags())
       .finally(() => {
-
-        this.renderFlags();
 
         this.obtainCorrectCountry();
 

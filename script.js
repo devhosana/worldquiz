@@ -50,36 +50,36 @@ const quiz = {
 
   },
 
+  // Falta somente mudar array que recebe países caso fizermos fetch da pergunta sobre fronteiras (de currentCountries p/ currentNeighbours)
+  async fetchCountries(countries, neighbours) {
 
-  fetchCountries(countries, neighbours) {
-
-    let promise;
-
-    countries.forEach((country, index) => {
-      const countryCode = neighbours ? country : country.code;
-
-      promise = 
-        fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
-        .then(response => response.json())
-        .then(data => {
-          if (!neighbours) currentCountries[index] = data[0];
-          if (neighbours) currentNeighbours.push(data[0]);
+    if (!neighbours) {
+      
+      currentCountries = await Promise.all(
+        countries.map(async function(country) {
+          return await fetch(`https://restcountries.com/v3.1/alpha/${neighbours ? country : country.code}`)
+            .then(response => response.json())
+            .then(data => data[0])
+          ;
         })
-      ;
+      );
 
-    });
+    };
 
-    return promise;
+    if (neighbours) {
+
+      currentNeighbours = await Promise.all(
+        countries.map(async function(country) {
+          return await fetch(`https://restcountries.com/v3.1/alpha/${neighbours ? country : country.code}`)
+            .then(response => response.json())
+            .then(data => data[0])
+          ;
+        })
+      );
+
+    };
+ 
   },
-
-
-  /*
-    const links = 
-      countries.map(country => {
-      return `https://restcountries.com/v3.1/alpha/${neighbours ? country : country.code}`;
-    })
-    ;
-  */
 
 
   toggleHidden() {
@@ -89,6 +89,7 @@ const quiz = {
 
 
   getRandomQuestion() {
+
     randomQuestionNum = randomNumFrom(allQuestions);
     
     while (randomQuestionNum === previousQuestion) randomQuestionNum = randomNumFrom(allQuestions);
@@ -103,8 +104,8 @@ const quiz = {
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
-    // randomQuestionNum = 3;
-    // console.log(randomQuestionNum);
+    // randomQuestionNum = 2;
+    console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
@@ -139,7 +140,7 @@ const quiz = {
     currentCountries = [...temp];
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
-    // currentCountries = [countries.easyLevel[0]];
+    // currentCountries = [{code: "DZA", island: false}];
     // console.log(currentCountries);
 
   },
@@ -327,7 +328,7 @@ const quiz = {
     this.revealCorrectAnswer();
 
     if (this.verifyAnswer()) score++;
-    console.log("Current score:", score);
+    console.log(`[ Current score: ${score} ]`);
 
     setTimeout(() => {
       this.toggleHidden();
@@ -458,10 +459,9 @@ const quiz = {
 
     this.getCountries();
 
-    this.fetchCountries(currentCountries)
-    
     // Parei aqui, perguntas 3 e 5 apresentam erro intermitente agora que dispensamos setTimeout
-      .then(() => {
+    this.fetchCountries(currentCountries)
+      .finally(() => {
 
         this.renderFlags();
 
@@ -490,6 +490,7 @@ const quiz = {
         // console.log(countries.allCountries);
 
       })
+    
     ;
 
   },

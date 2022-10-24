@@ -8,7 +8,6 @@ const countries = {
     {code: "ITA", island: false},
     {code: "CAN", island: false},
     {code: "USA", island: false}, 
-    {code: "MEX", island: false},
     {code: "FRA", island: false},
     {code: "ESP", island: false},
     {code: "DEU", island: false},

@@ -6,6 +6,9 @@ import countries from "./modules/countries.js";
 //////////////////////
 
 const splashScreen = document.querySelector(".splash__screen");
+const againScreen = document.querySelector(".play__again");
+const playAgainButton = document.querySelector(".button__again");
+const scoreElement = document.querySelector(".score__text");
 const allQuestions = document.querySelectorAll(".select__question");
 const playButton = document.querySelector(".play__button");
 const mainContainer = document.querySelector(".main__container");
@@ -323,18 +326,42 @@ const quiz = {
   },
 
 
+  finishMatch() {
+    currentQuestion.classList.add("hide__all");
+    againScreen.classList.remove("hide__all");
+    scoreElement.textContent = score + " ";
+  },
+
+
   evaluateAndAdvance() {
 
     this.revealCorrectAnswer();
 
     if (this.verifyAnswer()) score++;
 
+    // Quando jogo acaba
+    if (currentQuestionNumber === 10) {
+
+      setTimeout(() => {
+        this.toggleHidden();
+        
+        setTimeout(() => {
+          this.finishMatch();
+          this.toggleHidden()
+
+        }, 300);
+
+      }, 2000);
+
+      return;
+
+    };
+
     // Esse por sua vez será removido pois pretendo promissificar verify answer
     setTimeout(() => {
       this.toggleHidden();
       if (currentQuestionNumber > 0) this.resetForNewQuestion();
 
-      // Futuramente podemos medir a velocidade da internet e diminuir ou mesmo remover esse delay aqui
       setTimeout(() => this.loadQuestion(), 300);
 
     }, 1800);
@@ -402,14 +429,9 @@ const quiz = {
 
   },
 
+
   shuffleCountries() {
     countries.allCountries.sort(() => Math.random() - 0.5);
-  },
-
-
-  newGame() {
-    score = 0;
-    this.resetForNewQuestion();
   },
 
 
@@ -505,6 +527,8 @@ playButton.addEventListener("click", function() {
 
   // Escondendo Splash Screen 
   splashScreen.classList.add("hide__all");
+
+  quiz.shuffleCountries();
   
   // Escondendo mainContainer => exibindo novamente c/ pergunta aleatória
   quiz.toggleHidden();
@@ -512,6 +536,10 @@ playButton.addEventListener("click", function() {
   quiz.loadQuestion();
 
 });
+
+playAgainButton.addEventListener("click", () => document.location.reload(true));
+
+
 
 // Pergunta de capitais só sortear países médios e fáceis
 
@@ -534,6 +562,9 @@ playButton.addEventListener("click", function() {
 // Ajustar footer
 
 // Pergunta 4 está MUITO fácil, independente do país, mudar p/ => selecionar o país que pertence ao continente africano" ou algo assim
+
+// Adicionar chave: "suitableFor: [2, 4, 5]" p/ countries de forma a certos países não cairem em certas perguntas (tipo qual capital da gronelandia que ninguém sabe qual é)
+
 
 // Quando tempo terminar campo input retorna feedback se jogador acertou ou errou
 
@@ -569,6 +600,3 @@ playButton.addEventListener("click", function() {
 // Hungria X ITalia
 // Russia X luxemburgo
 // Islandia X Noruega X Suécia X Finlandia X Dinamarca
-
-
-quiz.shuffleCountries();

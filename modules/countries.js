@@ -76,6 +76,7 @@ const countries = {
     {code: "PSE", island: false},
     {code: "PHL", island: true},
     {code: "SEN", island: false},
+    {code: "EST", island: false},
     {code: "HUN", island: false},
     {code: "TZA", island: false},
   ],

@@ -53,36 +53,56 @@ const quiz = {
 
   },
 
+  errorHandler(error) {
+
+  },
+
+  async fetchNJSON(countryCode) {
+    return await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
+      .then(response => response.json())
+      .then(data => data[0])
+    ;
+  },
+
   // Falta somente mudar array que recebe países caso fizermos fetch da pergunta sobre fronteiras (de currentCountries p/ currentNeighbours)
   async fetchCountries(countries, neighbours) {
 
     if (!neighbours) {
-      
       currentCountries = await Promise.all(
-        countries.map(async function(country) {
-          return await fetch(`https://restcountries.com/v3.1/alpha/${neighbours ? country : country.code}`)
-            .then(response => response.json())
-            .then(data => data[0])
-          ;
+        countries.map(country => {
+          return this.fetchNJSON(country);
         })
       );
-
     };
 
-    if (neighbours) {
+    console.log(currentCountries);
 
+    if (neighbours) {
       currentNeighbours = await Promise.all(
-        countries.map(async function(country) {
-          return await fetch(`https://restcountries.com/v3.1/alpha/${neighbours ? country : country.code}`)
-            .then(response => response.json())
-            .then(data => data[0])
-          ;
+        countries.map(country => {
+          return this.fetchNJSON(country);
         })
       );
-
     };
  
   },
+
+  /*
+
+  if (neighbours) {
+
+    currentNeighbours = await Promise.all(
+      countries.map(async function(country) {
+        return await fetch(`https://restcountries.com/v3.1/alpha/${country}`)
+          .then(response => response.json())
+          .then(data => data[0])
+        ;
+      })
+    );
+
+  };
+
+  */
 
 
   toggleHidden() {
@@ -137,7 +157,7 @@ const quiz = {
         currentCountry = countries.getRandomCountry();
       };
       
-      temp.add(currentCountry);
+      temp.add(currentCountry.code);
     };
 
     currentCountries = [...temp];
@@ -329,7 +349,7 @@ const quiz = {
   finishMatch() {
     currentQuestion.classList.add("hide__all");
     againScreen.classList.remove("hide__all");
-    scoreElement.textContent = score + " ";
+    scoreElement.textContent = score;
   },
 
 
@@ -376,6 +396,7 @@ const quiz = {
 
     // Esconder campo da resposta correta se pergunta for a primeira
     if (currentQuestion === allQuestions[0]) currentQuestionPlaceholder.classList.add("hide__correct");
+    
     currentProgressBar.style.backgroundColor = "rgba(78, 248, 10, 0.75)";
 
     const timer = setInterval(() => {
@@ -403,9 +424,9 @@ const quiz = {
     if (currentCountries.length === 1) {
       correctCountry = currentCountries[0];
       
-      if (randomQuestionNum === 2)
-        this.fetchCountries(correctCountry.borders, "neighbours")
-      ;
+      if (randomQuestionNum === 2) {
+        this.fetchCountries(correctCountry.borders, "neighbours");
+      };
     };
     
     // Sorteando país que será a resposta correta
@@ -537,9 +558,11 @@ playButton.addEventListener("click", function() {
 
 });
 
-playAgainButton.addEventListener("click", () => document.location.reload(true));
+playAgainButton.addEventListener("click", () => {
+  document.location.reload(true)
+});
 
-
+// Mesmo embaralhando array de países e randomizando algum de lá tenho a impressão que na maioria das vezes sempre obtemos alguns sempre
 
 // Pergunta de capitais só sortear países médios e fáceis
 
@@ -565,6 +588,7 @@ playAgainButton.addEventListener("click", () => document.location.reload(true));
 
 // Adicionar chave: "suitableFor: [2, 4, 5]" p/ countries de forma a certos países não cairem em certas perguntas (tipo qual capital da gronelandia que ninguém sabe qual é)
 
+// Adicionar Bolivia de novo e tratar capital nas exceções (tem duas capitais)
 
 // Quando tempo terminar campo input retorna feedback se jogador acertou ou errou
 

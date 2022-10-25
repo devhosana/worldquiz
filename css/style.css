@@ -178,6 +178,64 @@ footer {
   color: var(--color--white__transparent);
 }
 
+.again__container {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.again__container--helper1 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.again__container--helper2 {
+  display: flex;
+  
+}
+
+.again__container--helper3 {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: center;
+  gap: 3.2rem;
+}
+
+.next__text,
+.score__text,
+.again__text {
+  font-size: 4.8rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.next__text,
+.score__text {
+  font-weight: 600;
+}
+
+.button__again {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 10px;
+  background-color: transparent;
+  padding: 0.5rem;
+}
+
+.again__icon {
+  font-size: 6.4rem;
+}
+
+
 
 /* DESATIVAR, APENAS PARA NETLIFY  */
 
@@ -204,64 +262,4 @@ body::after {
 }
 
 */
-
-.again__container {
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-}
-
-.again__container--helper1 {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 2.4rem;
-}
-
-.again__container--helper2 {
-  display: flex;
-  
-}
-
-.again__container--helper3 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.6rem;
-}
-
-.next__text,
-.score__text,
-.again__text {
-  font-size: 4.8rem;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.next__text,
-.score__text {
-  font-weight: 600;
-}
-
-.button__again {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid black;
-  border-radius: 10px;
-  background-color: transparent;
-  padding: 0.5rem;
-}
-
-.again__icon {
-  font-size: 6.4rem;
-}
-
-
-
 

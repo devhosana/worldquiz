@@ -30,7 +30,6 @@ let correctCountry;
 let currentFlagPlaceholders;
 let flagsContainer;
 let randomQuestionNum;
-let currentChoiceContainers;
 let playerAnswer;
 let score = 0;
 
@@ -39,77 +38,6 @@ let currentQuestionNumber = 0;
  
 
 const quiz = {
-
-  assignElements() {
-
-    // Obter placeholder do nome do país na pergunta (pode não haver)
-    currentQuestionPlaceholder = currentQuestion.querySelector(".question__placeholder");
-        
-    // Obter containers para seleção de bandeira (pode não haver)
-    currentChoiceContainers = currentQuestion.querySelectorAll(".choice__container");
-
-    // Obter número de bandeiras para definir quantas fetchs faremos
-    currentFlagPlaceholders = currentQuestion.querySelectorAll(".flag__img");
-
-  },
-
-  errorHandler(error) {
-
-  },
-
-  async fetchNJSON(countryCode) {
-    return await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
-      .then(response => response.json())
-      .then(data => data[0])
-    ;
-  },
-
-  // Falta somente mudar array que recebe países caso fizermos fetch da pergunta sobre fronteiras (de currentCountries p/ currentNeighbours)
-  async fetchCountries(countries, neighbours) {
-
-    if (!neighbours) {
-      currentCountries = await Promise.all(
-        countries.map(country => {
-          return this.fetchNJSON(country);
-        })
-      );
-    };
-
-    console.log(currentCountries);
-
-    if (neighbours) {
-      currentNeighbours = await Promise.all(
-        countries.map(country => {
-          return this.fetchNJSON(country);
-        })
-      );
-    };
- 
-  },
-
-  /*
-
-  if (neighbours) {
-
-    currentNeighbours = await Promise.all(
-      countries.map(async function(country) {
-        return await fetch(`https://restcountries.com/v3.1/alpha/${country}`)
-          .then(response => response.json())
-          .then(data => data[0])
-        ;
-      })
-    );
-
-  };
-
-  */
-
-
-  toggleHidden() {
-    mainContainer.classList.toggle("scaleDown");
-    mainContainer.classList.toggle("hidden");
-  },
-
 
   getRandomQuestion() {
 
@@ -132,6 +60,68 @@ const quiz = {
 
     currentQuestion = allQuestions[randomQuestionNum];
   
+  },
+
+  assignElements() {
+
+    this.getRandomQuestion();
+
+    // Obter placeholder do nome do país na pergunta (pode não haver)
+    currentQuestionPlaceholder = currentQuestion.querySelector(".question__placeholder");
+
+    // Obter número de bandeiras para definir quantas fetchs faremos
+    currentFlagPlaceholders = currentQuestion.querySelectorAll(".flag__img");
+
+  },
+
+  /*
+  errorHandler(error) {
+    console.warn(error);
+  },
+  */
+
+  async fetchNJSON(countryCode) {
+
+    return await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
+      .then(response => {
+        // if (!response.ok) throw new Error(`No internet connection ${response.status}`);
+        return response.json();
+      })
+      .then(data => data[0])
+      /*
+      .catch(error => {
+        this.errorHandler(error);
+      })
+      */
+    ;
+
+  },
+
+
+  async fetchCountries(countries, neighbours) {
+
+    if (!neighbours) {
+      return currentCountries = await Promise.all(
+        countries.map(country => {
+          return this.fetchNJSON(country);
+        })
+      );
+    };
+
+    if (neighbours) {
+      return currentNeighbours = await Promise.all(
+        countries.map(country => {
+          return this.fetchNJSON(country);
+        })
+      );
+    };
+ 
+  },
+
+
+  toggleHidden() {
+    mainContainer.classList.toggle("scaleDown");
+    mainContainer.classList.toggle("hidden");
   },
 
   
@@ -494,8 +484,6 @@ const quiz = {
 
 
   loadQuestion() {
-    
-    this.getRandomQuestion();
 
     this.assignElements();
     
@@ -505,10 +493,12 @@ const quiz = {
 
     this.getCountries();
 
-    // Parei aqui, perguntas 3 e 5 apresentam erro intermitente agora que dispensamos setTimeout
     this.fetchCountries(currentCountries)
-      .then(() => this.renderFlags())
-      .finally(() => {
+      .then((foo) => {
+
+        // if (!foo[0]) throw new Error(`No internet connection ${response.status}`);
+
+        this.renderFlags();
 
         this.obtainCorrectCountry();
 
@@ -519,7 +509,7 @@ const quiz = {
 
         this.storeAnswer();
     
-        // Iniciando Timer - 325ms === +/- 7 segundos
+        // Iniciando Timer - 300ms === +/- 7 segundos
         this.initTimer(300);
     
         // DEBUG P/ PERGUNTA 2 sobre fronteiras
@@ -535,7 +525,11 @@ const quiz = {
         // console.log(countries.allCountries);
 
       })
-    
+      /*
+      .catch(error => {
+        this.errorHandler(error);
+      })
+      */
     ;
 
   },

@@ -14,5 +14,5 @@ To practice JavaScript and programming logic, it's a 100% original idea so I tho
 - HTML 
 - CSS 
 
-In a near future this I'll convert it to React or other library/framework as a personal challenge.
+In a near future I'll convert this to React or other library/framework as a personal challenge.
 

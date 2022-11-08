@@ -6,7 +6,7 @@ To practice JavaScript and programming logic, it's a 100% original idea so I tho
 
 **How it works**
 
-10 Questions about countries, flags and more, questions and countrie are always randomized, no question is hard-coded, player has 7 seconds to answer each question. 
+10 Questions about countries, flags and more, questions and countries are randomized, no question is hard-coded, player has 7 seconds to answer each question.
 
 **What I use here**
 

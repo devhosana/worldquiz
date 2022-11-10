@@ -1,9 +1,0 @@
-.flags__container--5 {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  
-  row-gap: 3.2rem;
-  column-gap: 4.8rem;
-  
-  padding: 3.2rem;
-}

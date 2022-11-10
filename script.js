@@ -55,7 +55,7 @@ const quiz = {
     // 4 - Em qual continente esse país fica
     // 5 - Qual destas 4 é a bandeira da Esbórnia?
 
-    // randomQuestionNum = 2;
+    // randomQuestionNum = 3;
     // console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
@@ -588,6 +588,8 @@ playAgainButton.addEventListener("click", () => {
 
 // Impedir de digitar após apresentar, right, wrong ou no answer
 
+// por alguma razao toggleHidden nao esta funcionando ao jogo começar
+
 // Reembaralhar array dos países a cada pergunta
 
 // Netherlands tá aparecendo uma bandeira completamente estranha...
@@ -601,6 +603,8 @@ playAgainButton.addEventListener("click", () => {
 // Fazer isso se jogador acertar muitas seguidas
 
 // Criar função para respostas exceções, como washignton, d.c., czechia, russia estar na europa e na ásia, etc
+
+// Bandeira do Qatar está bem distorcida (desativei em countries)
 
 // Acabei de descobrir que russia faz parte de dois continentes, resolver isso na pergunta sobre continentes
 

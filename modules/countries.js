@@ -69,7 +69,7 @@ const countries = {
     {code: "IDN", island: false},
     {code: "SGP", island: true},
     {code: "LBN", island: false},
-    {code: "QAT", island: false},
+    // {code: "QAT", island: false},
     {code: "DZA", island: false},
     {code: "CIV", island: false},
     {code: "CMR", island: false},

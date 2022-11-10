@@ -8,3 +8,91 @@ SPACING SYSTEM (px)
 64 / 80 / 96 / 128 / 144 / 160
 */
 
+/* abaixo de 1280px && 577 (portátil de 13.3) */
+@media (max-width: 1280px) and (max-height: 577.33px) {
+
+  /* 1rem === 9px */
+  html {
+  font-size: 56.25%;
+  }
+
+  .main__container {
+    padding: 3.6rem !important;
+  }
+
+  .question__container {
+    gap: 1.6rem;
+  }
+
+  .icon__heading {
+    font-size: 8rem;
+  }
+
+  .heading__primary {
+    font-size: 5.2rem !important;
+  }
+
+  .heading__secondary {
+    font-size: 2.4rem !important;
+  }
+
+  .text__how {
+    font-size: 2rem !important;
+  }
+
+  .play__button { 
+    font-size: 1.8rem !important;
+    padding: 1.2rem 2.4rem !important;
+  }
+
+  .inner__container--splash {
+    grid-template-rows: 25fr 20fr 45fr 10fr;
+  }
+
+  .question,
+  .question__text {
+    font-size: 3rem !important;
+  }
+
+  .flag__container--1 {
+    /* Diminuição de 30% em relação ao tamanho original */
+    max-width: 28.87rem !important;
+    max-height: 16.35rem !important; 
+  }
+
+  .flags__container--2 {
+    gap: 1.4rem !important;
+  }
+  
+  .flag__container--2 {
+    /* Redução de 25% do tamanho original */
+    max-width: 17.82rem !important;
+    max-height: 10.09rem !important;
+  }
+  
+  .country__name {
+    font-size: 2rem !important;
+  }
+  
+  .input__container {
+    align-self: end;
+    padding: 2rem !important;
+  }
+
+  .input__answer {
+    font-size: 1.8rem !important;
+  }
+  
+}
+
+
+
+/* abaixo de 1100px */
+@media (max-width: 68.75em) {
+
+  .main__container {
+    /* width: 90%; */
+  }
+
+
+}

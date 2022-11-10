@@ -4,8 +4,15 @@
 }
 
 .flag__container--1 {
-  width: 41.25rem;
-  height: 23.37rem;
+  /* Você pode se perguntar, porque não usou porcentagem? */
+  /*
+    Muitas bandeiras ficaram completamente distorcidas por conta das suas diferentes proporções
+    De maneira que depois de muitos testes o tamanho p/ a maioria delas ficar bem apresentável é esta
+  */
+  max-width: 41.25rem;
+  max-height: 23.37rem; 
+
+ 
 }
 
 .hide__correct {

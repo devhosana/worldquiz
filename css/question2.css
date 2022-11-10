@@ -5,7 +5,7 @@
 }
 
 .flag__container--2 {
-  width: 23.76rem;
-  height: 13.46rem;
+  max-width: 23.76rem;
+  max-height: 13.46rem;
   cursor: pointer;
 }

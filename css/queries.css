@@ -20,7 +20,7 @@ SPACING SYSTEM (px)
 
   /* Em ambos, diminuição de 10% em relação ao tamanho original */
   .flag__container--1 {
-    max-width: 32.12rem !important;
+    max-width: 37.12rem !important;
     max-height: 21.03rem !important; 
   }
 
@@ -36,18 +36,40 @@ SPACING SYSTEM (px)
 }
 
 
-@media (max-width: 1280px) and (max-height: 577.33px) {
+/* abaixo de 1500px */
+@media (max-width: 93.75em) {
 
-  
+  /* 1rem === 9px */
+  html {
+    font-size: 56.25%;
+  }
+
+  .main__container {
+    width: 90% !important;
+    padding: 4.2rem;
+  }
+
+  .question__text {
+    font-size: 3.4rem !important;
+  }
+
+  .inner__container--splash {
+    grid-template-rows: 20fr 10fr 57.5fr 12.5fr;
+  }
+
 }
 
 
-/* abaixo de 1100px */
-@media (max-width: 68.75em) {
+/* abaixo de 1000px */
+@media (max-width: 62.5em) {
 
-  .main__container {
-    /* width: 90%; */
+  /* 1rem === 9px */
+  html {
+    font-size: 50.25%;
   }
 
+  .main__container {
+    width: 95% !important;
+  }
 
 }

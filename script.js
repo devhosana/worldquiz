@@ -494,7 +494,7 @@ const quiz = {
     this.getCountries();
 
     this.fetchCountries(currentCountries)
-      .then((foo) => {
+      .finally(() => {
 
         // if (!foo[0]) throw new Error(`No internet connection ${response.status}`);
 
@@ -608,6 +608,8 @@ playAgainButton.addEventListener("click", () => {
 
 // Acabei de descobrir que russia faz parte de dois continentes, resolver isso na pergunta sobre continentes
 
+// criar conteiner com tamanho fixo e dentro do conteiner a bandeira com tamanho variável, para que bandeiras em 4:3 ou maiores que 16:9 não fiquem mais com altura e largura distorcida nem cortadas
+
 // tunisia X turquia
 // bandeira puerto rico X cuba
 // australia X nova zelandia
@@ -622,3 +624,6 @@ playAgainButton.addEventListener("click", () => {
 // Hungria X ITalia
 // Russia X luxemburgo
 // Islandia X Noruega X Suécia X Finlandia X Dinamarca
+
+// WHAT
+// console.log([] == 0);

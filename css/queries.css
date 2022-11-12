@@ -1,11 +1,11 @@
 /*
-FONT SIZE SYSTEM (px)
-10 / 12 / 14 / 16 / 18 / 20 / 24 /
-30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+  FONT SIZE SYSTEM (px)
+  10 / 12 / 14 / 16 / 18 / 20 / 24 /
+  30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
 
-SPACING SYSTEM (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 /
-64 / 80 / 96 / 128 / 144 / 160
+  SPACING SYSTEM (px)
+  2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 /
+  64 / 80 / 96 / 128 / 144 / 160
 */
 
 
@@ -46,11 +46,12 @@ SPACING SYSTEM (px)
 
   .main__container {
     width: 90% !important;
+    height: 75% !important;
     padding: 4.2rem;
   }
 
   .question__text {
-    font-size: 3.4rem !important;
+    font-size: 3.2rem !important;
   }
 
   .inner__container--splash {
@@ -63,13 +64,48 @@ SPACING SYSTEM (px)
 /* abaixo de 1000px */
 @media (max-width: 62.5em) {
 
-  /* 1rem === 9px */
-  html {
-    font-size: 50.25%;
+  body {
+    justify-content: space-between;
   }
 
   .main__container {
-    width: 95% !important;
+    position: absolute;
+    margin-top: 2.4rem !important;
+    width: 90% !important;
+    max-height: 60% !important;
+    margin-top: 0;
+  }
+
+}
+
+/* abaixo de 750px */
+@media (max-width: 46.87em) {
+
+  /* 1rem === 7px */
+  html {
+    font-size: 43.75%;
+  }
+
+  .main__container {
+    min-width: 90% !important;
+    min-height: 92.5% !important;
+  }
+
+  .text__how {
+    padding: 1.6rem 7.5%;
+  }
+
+  .input__container {
+    width: 100%;
+  }
+
+  .flag__container--1 {
+    max-width: 35.26rem !important;
+    max-height: 19.97rem !important; 
+  }
+
+  .flags__container--2 {
+    gap: 1.2rem !important;
   }
 
 }

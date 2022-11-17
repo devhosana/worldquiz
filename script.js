@@ -48,21 +48,21 @@ const quiz = {
     previousQuestion = randomQuestionNum;
 
     // DEBUG P/ ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
-    // 0 - De qual país é essa bandeira
-    // 1 - Qual a capital desse país
-    // 2 - Nomeie um país que faça fronteira com este
-    // 3 - Berlin é a capital de qual destes países?
-    // 4 - Em qual continente esse país fica
-    // 5 - Qual destas 4 é a bandeira da Esbórnia?
+    // 0 - Berlin é a capital de qual destes países?
+    // 1 - Marque o país que pertence que a Europa
+    // 2 - Qual destas 4 é a bandeira da Esbórnia?
+    // 3 - Nomeie um país que faça fronteira com este
+    // 4 - De qual país é essa bandeira
+    // 5 - Qual a capital desse país
 
-    // randomQuestionNum = 3;
+    randomQuestionNum = 1;
     // console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
   
   },
 
-  assignElements() {
+  assignVariables() {
 
     this.getRandomQuestion();
 
@@ -408,18 +408,37 @@ const quiz = {
 
   },
 
+  fillCountryNamePlaceholder() {
 
-  obtainCorrectCountry() {
+    if (randomQuestionNum === 0) {
+      currentQuestionPlaceholder.textContent = correctCountry.capital[0];
+    };
+    
+    if (randomQuestionNum === 1) {
+      currentQuestionPlaceholder.textContent = correctCountry.region;
+    };
+
+    // Aqui não queremos que nome do país seja exibido se pergunta for a 5
+    // Nesta nome correto só será exbido quando tempo acabar
+    if (randomQuestionNum > 1 && randomQuestionNum < 4) {
+      currentQuestionPlaceholder.textContent = correctCountry.name.common;
+    };
+
+  },
+
+
+  assignCorrectCountry() {
 
     if (currentCountries.length === 1) {
       correctCountry = currentCountries[0];
       
-      if (randomQuestionNum === 2) {
+      // Se pergunta for sobre fronteiras
+      if (randomQuestionNum === 4) {
         this.fetchCountries(correctCountry.borders, "neighbours");
       };
+
     };
     
-    // Sorteando país que será a resposta correta
     if (currentCountries.length > 1) {
       correctCountry = currentCountries[randomNumFrom(currentCountries)];
     };
@@ -427,16 +446,6 @@ const quiz = {
     // Repúplica Tcheca .common tem um nome diferente do restante (Czechia)
     if (correctCountry.name.common === "Czechia") correctCountry.name.common = "Czech Republic";
   
-    // Se pergunta for sobre capital, senão o else serve para todas as outras perguntas     
-    if (randomQuestionNum === 3) {
-      currentQuestionPlaceholder.textContent = correctCountry.capital[0];
-    } else {
-  
-      // Se pergunta atual NÃO for a primeira (nesta, só será inserido nome do país quando tempo acabar)
-      if (!(randomQuestionNum === 0)) {
-        currentQuestionPlaceholder.textContent = correctCountry.name.common;
-      };
-    };
 
   },
 
@@ -485,7 +494,7 @@ const quiz = {
 
   loadQuestion() {
 
-    this.assignElements();
+    this.assignVariables();
     
     this.increaseQuestionNumber();
     
@@ -500,7 +509,9 @@ const quiz = {
 
         this.renderFlags();
 
-        this.obtainCorrectCountry();
+        this.assignCorrectCountry();
+
+        this.fillCountryNamePlaceholder();
 
         this.removeCurrentCorrectCountry(correctCountry.cca3);
 

@@ -121,9 +121,7 @@ const quiz = {
     // E inserir no HTML
     currentQuestion.querySelector(".question__number").textContent = currentQuestionNumber;
   },
-  
-  // Parei aqui, escrever lógica para sortear países da pergunta 1 - verifyAnswer está totalmente trocado
-  // while (país atual.region === último país.region) >>> Já tenho method para isso em algum lugar...
+
 
   getCountries() {
     

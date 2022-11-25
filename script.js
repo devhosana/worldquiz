@@ -127,23 +127,25 @@ const quiz = {
 
   getCountries() {
     
-    let currentCountry = countries.getRandomCountry();
     let temp = new Set();
+    let currentCountry;
     
     ////////////////////////////////////////////////////////
 
     /// Sortear 4 regiões diferentes na pergunta 1 ///
     while (randomQuestionNum === 0 && temp.size < currentFlagPlaceholders.length) {
 
-      console.log([...temp].some(value => value.region === currentCountry.region));
+      currentCountry = countries.getRandomCountry();
 
-      const regionIsRepeated =
+      const regionIsRepeated = 
         [...temp].some(value => value.region === currentCountry.region)
       ;
       
       if (regionIsRepeated) {
         currentCountry = countries.getRandomCountry();
       } else {
+        // Cortei países que fazem partes de dois continentes como Turquia e Russia
+        if (currentCountry.region.includes(" ")) continue;
         temp.add(currentCountry);
       };
       

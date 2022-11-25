@@ -48,14 +48,14 @@ const quiz = {
     previousQuestion = randomQuestionNum;
 
     // DEBUG P/ ESCOLHER PERGUNTA OU VER QUAL FOI SORTEADA
-    // 0 - Berlin é a capital de qual destes países?
-    // 1 - Marque o país que pertence que a Europa
+    // 0 - Marque o país que pertence que a Europa
+    // 1 - Berlin é a capital de qual destes países?
     // 2 - Qual destas 4 é a bandeira da Esbórnia?
     // 3 - Nomeie um país que faça fronteira com este
     // 4 - De qual país é essa bandeira
     // 5 - Qual a capital desse país
 
-    randomQuestionNum = 1;
+    randomQuestionNum = 0;
     // console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
@@ -74,25 +74,14 @@ const quiz = {
 
   },
 
-  /*
-  errorHandler(error) {
-    console.warn(error);
-  },
-  */
 
   async fetchNJSON(countryCode) {
 
     return await fetch(`https://restcountries.com/v3.1/alpha/${countryCode}`)
       .then(response => {
-        // if (!response.ok) throw new Error(`No internet connection ${response.status}`);
         return response.json();
       })
       .then(data => data[0])
-      /*
-      .catch(error => {
-        this.errorHandler(error);
-      })
-      */
     ;
 
   },
@@ -133,28 +122,61 @@ const quiz = {
     currentQuestion.querySelector(".question__number").textContent = currentQuestionNumber;
   },
   
+  // Parei aqui, escrever lógica para sortear países da pergunta 1 - verifyAnswer está totalmente trocado
+  // while (país atual.region === último país.region) >>> Já tenho method para isso em algum lugar...
 
   getCountries() {
     
+    let currentCountry = countries.getRandomCountry();
     let temp = new Set();
+    
+    ////////////////////////////////////////////////////////
 
-    while (temp.size < currentFlagPlaceholders.length)  {
+    /// Sortear 4 regiões diferentes na pergunta 1 ///
+    while (randomQuestionNum === 0 && temp.size < currentFlagPlaceholders.length) {
+
+      console.log([...temp].some(value => value.region === currentCountry.region));
+
+      const regionIsRepeated =
+        [...temp].some(value => value.region === currentCountry.region)
+      ;
       
-      let currentCountry = countries.getRandomCountry();
-      
-      // Impedir que ilhas sejam sorteadas na pergunta 2
-      while (randomQuestionNum === 2 && currentCountry.island) {
+      if (regionIsRepeated) {
         currentCountry = countries.getRandomCountry();
+      } else {
+        temp.add(currentCountry);
       };
       
-      temp.add(currentCountry.code);
     };
 
-    currentCountries = [...temp];
+    if (randomQuestionNum > 0) {
+
+      while (temp.size < currentFlagPlaceholders.length) {
+      
+        currentCountry = countries.getRandomCountry();
+        
+        /// Impedir que ilhas sejam sorteadas na perguntas 3 ///
+        while (randomQuestionNum === 3 && currentCountry.island) {
+          currentCountry = countries.getRandomCountry();
+        };
+        
+        temp.add(currentCountry);
+  
+      };
+
+
+    };
+
+    [...temp].forEach(country => console.log(country.region));
+
+    currentCountries = [...temp].map(country => country.code);
+
+    console.log(currentCountries);
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
     // currentCountries = [{code: "DZA", island: false}];
     // console.log(currentCountries);
+    
 
   },
 
@@ -218,7 +240,7 @@ const quiz = {
   },
 
   
-  rightOrWrong(text) {
+  informRightOrWrong(text) {
     const inputField = currentQuestion.querySelector(".input__answer");
 
     if (inputField) {
@@ -270,8 +292,8 @@ const quiz = {
 
     // Ternary operator acontecerá ou short circuiting 
     if (randomQuestionNum <= 2 || randomQuestionNum === 5) {
-      this.rightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
-      playerAnswer || this.rightOrWrong("No answer");
+      this.informRightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
+      playerAnswer || this.informRightOrWrong("No answer");
     };
 
     return isCorrect;
@@ -306,15 +328,12 @@ const quiz = {
     // Futuramente respostas corretas serão todas reveladas, nas que contém input e nas de múltipla escolha
     // if (!(randomQuestionNum === 0)) return;
 
-    if (timeOver && randomQuestionNum === 0) {
+    if (timeOver && randomQuestionNum === 4) {
       currentQuestionPlaceholder.textContent = correctCountry.name.common;
       currentQuestionPlaceholder.classList.remove("hide__correct");
     };
 
-    // Futuramente, quando pergunta sobre continente for de múltipla escolha
-    // if (randomQuestionNum >= 3) {
-
-    if (randomQuestionNum === 5 || randomQuestionNum === 3) {
+    if (randomQuestionNum <= 2) {
                                                                  
       let correctOption = Array.from(currentFlagPlaceholders)
         .find(element => element.src === correctCountry.flags.svg)
@@ -408,19 +427,20 @@ const quiz = {
 
   },
 
+
   fillCountryNamePlaceholder() {
 
     if (randomQuestionNum === 0) {
-      currentQuestionPlaceholder.textContent = correctCountry.capital[0];
+      currentQuestionPlaceholder.textContent = correctCountry.region;
     };
     
     if (randomQuestionNum === 1) {
-      currentQuestionPlaceholder.textContent = correctCountry.region;
+      currentQuestionPlaceholder.textContent = correctCountry.capital[0];
     };
 
     // Aqui não queremos que nome do país seja exibido se pergunta for a 5
     // Nesta nome correto só será exbido quando tempo acabar
-    if (randomQuestionNum > 1 && randomQuestionNum < 4) {
+    if (randomQuestionNum > 1 && randomQuestionNum < 5) {
       currentQuestionPlaceholder.textContent = correctCountry.name.common;
     };
 
@@ -433,7 +453,7 @@ const quiz = {
       correctCountry = currentCountries[0];
       
       // Se pergunta for sobre fronteiras
-      if (randomQuestionNum === 4) {
+      if (randomQuestionNum === 3) {
         this.fetchCountries(correctCountry.borders, "neighbours");
       };
 
@@ -442,10 +462,6 @@ const quiz = {
     if (currentCountries.length > 1) {
       correctCountry = currentCountries[randomNumFrom(currentCountries)];
     };
-      
-    // Repúplica Tcheca .common tem um nome diferente do restante (Czechia)
-    if (correctCountry.name.common === "Czechia") correctCountry.name.common = "Czech Republic";
-  
 
   },
 
@@ -460,7 +476,7 @@ const quiz = {
     currentQuestion.classList.add("hide__all");
 
     // Função também é útil p/ resetar textp do campo input
-    this.rightOrWrong("Your answer");
+    this.informRightOrWrong("Your answer");
 
     // Colocar IF aqui para que isso ocorra somente se pergunta 3 ou 5 forem as previousQuestion
     const highlight1 = document.querySelector(".choice__container--correct__option");
@@ -505,8 +521,6 @@ const quiz = {
     this.fetchCountries(currentCountries)
       .finally(() => {
 
-        // if (!foo[0]) throw new Error(`No internet connection ${response.status}`);
-
         this.renderFlags();
 
         this.assignCorrectCountry();
@@ -521,7 +535,7 @@ const quiz = {
         this.storeAnswer();
     
         // Iniciando Timer - 300ms === +/- 7 segundos
-        this.initTimer(300);
+        this.initTimer(200000);
     
         // DEBUG P/ PERGUNTA 2 sobre fronteiras
         // currentNeighbours.forEach(country => console.log(country));

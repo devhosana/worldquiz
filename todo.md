@@ -56,8 +56,6 @@
 
 // por alguma razao toggleHidden nao esta funcionando ao jogo começar
 
-// Reembaralhar array dos países a cada pergunta
-
 // Netherlands tá aparecendo uma bandeira completamente estranha...
 // Apareceu do nada cook islands tbm (ao fazer fetch de "Iran")
 

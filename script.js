@@ -52,10 +52,10 @@ const quiz = {
     // 1 - Berlin é a capital de qual destes países?
     // 2 - Qual destas 4 é a bandeira da Esbórnia?
     // 3 - Nomeie um país que faça fronteira com este
-    // 4 - De qual país é essa bandeira
-    // 5 - Qual a capital desse país
+    // 4 - Qual a capital desse país
+    // 5 - De qual país é essa bandeira
 
-    randomQuestionNum = 0;
+    // randomQuestionNum = 5;
     // console.log(`---- Pergunta atual: ${randomQuestionNum} ----`);
 
     currentQuestion = allQuestions[randomQuestionNum];
@@ -130,6 +130,13 @@ const quiz = {
     
     ////////////////////////////////////////////////////////
 
+    // Sorteio comum para qualquer pergunta que não seja 0 ou 3
+    while (randomQuestionNum !== 0 && randomQuestionNum !== 3 && temp.size < currentFlagPlaceholders.length) {
+      currentCountry = countries.getRandomCountry();
+      temp.add(currentCountry);
+    };
+
+
     /// Sortear 4 regiões diferentes na pergunta 1 ///
     while (randomQuestionNum === 0 && temp.size < currentFlagPlaceholders.length) {
 
@@ -140,8 +147,10 @@ const quiz = {
       ;
       
       if (regionIsRepeated) {
-        currentCountry = countries.getRandomCountry();
-      } else {
+        continue;
+      };
+      
+      if (!regionIsRepeated) {
         // Cortei países que fazem partes de dois continentes como Turquia e Russia
         if (currentCountry.region.includes(" ")) continue;
         temp.add(currentCountry);
@@ -149,34 +158,18 @@ const quiz = {
       
     };
 
-    if (randomQuestionNum > 0) {
 
-      while (temp.size < currentFlagPlaceholders.length) {
-      
-        currentCountry = countries.getRandomCountry();
-        
-        /// Impedir que ilhas sejam sorteadas na perguntas 3 ///
-        while (randomQuestionNum === 3 && currentCountry.island) {
-          currentCountry = countries.getRandomCountry();
-        };
-        
-        temp.add(currentCountry);
-  
-      };
-
-
+    /// Impedir que ilhas sejam sorteadas na perguntas 3 ///
+    while (randomQuestionNum === 3 && currentCountry.island) {
+      currentCountry = countries.getRandomCountry();
+      temp.add(currentCountry);
     };
 
-    [...temp].forEach(country => console.log(country.region));
-
     currentCountries = [...temp].map(country => country.code);
-
-    console.log(currentCountries);
     
     // DEBUG - ESCOLHER PAÍS P/ TESTES
     // currentCountries = [{code: "DZA", island: false}];
     // console.log(currentCountries);
-    
 
   },
 
@@ -265,35 +258,28 @@ const quiz = {
 
     let isCorrect = false;
 
-    if (randomQuestionNum === 0) {
-      if (playerAnswer === this.normalizeString(correctCountry.name.common)) isCorrect = true;
+    if (randomQuestionNum <= 2) {
+      playerAnswer = playerAnswer?.querySelector(".flag__img");
+      if (playerAnswer?.src === correctCountry.flags.svg) isCorrect = true;
     };
+
     
-    if (randomQuestionNum === 1) {
-      if (playerAnswer === this.normalizeString(correctCountry.capital[0])) isCorrect = true;
-    }
-    
-    if (randomQuestionNum === 2) {
+    if (randomQuestionNum === 3) {
       isCorrect = 
         currentNeighbours.some(neighbour => {
           return this.normalizeString(neighbour.name.common) === playerAnswer;
         })
       ;
     };
-    
-    if (randomQuestionNum === 3 || randomQuestionNum === 5) {
-      playerAnswer = playerAnswer?.querySelector(".flag__img");
-      if (playerAnswer?.src === correctCountry.flags.svg) isCorrect = true;
-    };
+
     
     if (randomQuestionNum === 4) {
-      if (playerAnswer === this.normalizeString(correctCountry.region)) isCorrect = true;
+      if (playerAnswer === this.normalizeString(correctCountry.capital[0])) isCorrect = true;
     };
 
-    // Ternary operator acontecerá ou short circuiting 
-    if (randomQuestionNum <= 2 || randomQuestionNum === 5) {
-      this.informRightOrWrong(isCorrect ? "Correct answer" : "Wrong answer");
-      playerAnswer || this.informRightOrWrong("No answer");
+
+    if (randomQuestionNum === 5) {
+      if (playerAnswer === this.normalizeString(correctCountry.name.common)) isCorrect = true;
     };
 
     return isCorrect;
@@ -325,10 +311,7 @@ const quiz = {
 
   revealCorrectAnswer() {
 
-    // Futuramente respostas corretas serão todas reveladas, nas que contém input e nas de múltipla escolha
-    // if (!(randomQuestionNum === 0)) return;
-
-    if (timeOver && randomQuestionNum === 4) {
+    if (timeOver && randomQuestionNum === 5) {
       currentQuestionPlaceholder.textContent = correctCountry.name.common;
       currentQuestionPlaceholder.classList.remove("hide__correct");
     };
@@ -366,7 +349,17 @@ const quiz = {
 
     this.revealCorrectAnswer();
 
-    if (this.verifyAnswer()) score++;
+    const answerIsCorrect = this.verifyAnswer();
+
+    if (answerIsCorrect) score++;
+
+    // Dar feedback se está correto ou não
+    if (randomQuestionNum > 2) {
+      this.informRightOrWrong(answerIsCorrect ? "Correct answer" : "Wrong answer");
+
+      // Caso não haja resposta do jogador
+      playerAnswer || this.informRightOrWrong("No answer");
+    };
 
     // Quando jogo acaba
     if (currentQuestionNumber === 10) {
@@ -404,7 +397,7 @@ const quiz = {
     let time = 100;
 
     // Esconder campo da resposta correta se pergunta for a primeira
-    if (currentQuestion === allQuestions[0]) currentQuestionPlaceholder.classList.add("hide__correct");
+    if (currentQuestion === allQuestions[5]) currentQuestionPlaceholder.classList.add("hide__correct");
     
     currentProgressBar.style.backgroundColor = "rgba(78, 248, 10, 0.75)";
 
@@ -495,7 +488,7 @@ const quiz = {
     // Limpar países anteriormente randomizados e vizinhos
     currentCountries = [];
 
-    currentNeighbours = [];
+    if (currentNeighbours.length > 0) currentNeighbours = [];
 
     flagsContainer = undefined;
 
@@ -535,9 +528,9 @@ const quiz = {
         this.storeAnswer();
     
         // Iniciando Timer - 300ms === +/- 7 segundos
-        this.initTimer(200000);
+        this.initTimer(300);
     
-        // DEBUG P/ PERGUNTA 2 sobre fronteiras
+        // DEBUG P/ PERGUNTA 3 sobre fronteiras
         // currentNeighbours.forEach(country => console.log(country));
     
         // Colocando cursor diretamente no campo da resposta (pode não haver)
